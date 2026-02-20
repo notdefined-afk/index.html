@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Loop — Practice Mode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08080e;
+    --surface: #0f0f18;
+    --surface2: #141420;
+    --surface3: #1a1a28;
+    --accent: #7c6dff;
+    --accent2: #a599ff;
+    --accent-soft: rgba(124,109,255,0.12);
+    --green: #4adb96;
+    --red: #ff5e7d;
+    --text: #f0f0f8;
+    --text2: #9898b0;
+    --text3: #5a5a72;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+  }
+
+  /* Background blobs */
+  .blob-container {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 0; overflow: hidden;
+    max-width: 480px; margin: 0 auto;
+  }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.12;
+  }
+  .blob-1 { width: 300px; height: 300px; background: var(--accent); top: -100px; right: -80px; }
+  .blob-2 { width: 200px; height: 200px; background: var(--green); bottom: 200px; left: -60px; }
+
+  .app { position: relative; z-index: 1; padding: 0 20px; }
+
+  /* Header */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 56px 0 24px;
+  }
+  .logo {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .logo span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+  .free-badge {
+    font-size: 11px; font-weight: 600; padding: 4px 10px;
+    background: var(--accent-soft); color: var(--accent2);
+    border-radius: 20px; border: 1px solid rgba(124,109,255,0.25);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed var(--border2);
+    border-radius: var(--radius);
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .upload-icon {
+    font-size: 40px; margin-bottom: 12px;
+    display: block;
+  }
+  .upload-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .upload-sub { font-size: 13px; color: var(--text3); }
+  .upload-formats {
+    margin-top: 12px; font-size: 11px; color: var(--text3);
+    font-family: 'DM Mono', monospace; letter-spacing: 0.5px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .card-inner { padding: 16px; }
+
+  /* Track info */
+  .track-info {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .track-thumb {
+    width: 56px; height: 56px; border-radius: 12px;
+    background: var(--surface3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .track-thumb.playing { animation: pulse-thumb 2s ease-in-out infinite; }
+  @keyframes pulse-thumb {
+    0%,100% { box-shadow: 0 0 0 0 rgba(124,109,255,0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(124,109,255,0); }
+  }
+  .track-meta { flex: 1; min-width: 0; }
+  .track-title { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-sub { font-size: 13px; color: var(--text3); margin-top: 2px; }
+  .loop-pill {
+    font-size: 10px; font-weight: 700; padding: 3px 8px;
+    background: var(--accent-soft); color: var(--accent2);
+    border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Waveform */
+  .waveform-wrap {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+  #waveform {
+    width: 100%; height: 60px; cursor: pointer;
+    border-radius: 8px; overflow: hidden;
+  }
+  .time-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 10px;
+  }
+  .time-mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--text3);
+  }
+  .loop-range-badge {
+    display: none;
+    align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    background: var(--accent-soft); padding: 4px 10px; border-radius: 20px;
+  }
+  .loop-range-badge.visible { display: flex; }
+  .loop-range-badge .a { color: var(--green); font-weight: 700; }
+  .loop-range-badge .b { color: var(--red); font-weight: 700; }
+  .loop-range-badge .t { color: var(--text3); }
+
+  /* Transport */
+  .transport {
+    display: flex; align-items: center; justify-content: center;
+    gap: 24px; padding: 20px 0;
+  }
+  .btn-icon {
+    background: none; border: none; cursor: pointer;
+    color: var(--text2); padding: 8px;
+    border-radius: 50%; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-icon:hover { color: var(--text); background: var(--surface3); }
+  .btn-icon:active { transform: scale(0.92); }
+  .btn-play {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--accent);
+    border: none; cursor: pointer; color: white;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 32px rgba(124,109,255,0.4);
+    transition: all 0.15s;
+  }
+  .btn-play:hover { transform: scale(1.05); }
+  .btn-play:active { transform: scale(0.95); }
+  .btn-play.playing { background: var(--accent); }
+
+  /* Loop controls */
+  .loop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .btn-loop {
+    padding: 13px; border-radius: 12px;
+    border: 1.5px solid var(--border2);
+    background: var(--surface2);
+    cursor: pointer; color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-loop:active { transform: scale(0.97); }
+  .btn-loop .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .btn-a { color: var(--green); }
+  .btn-a .badge { background: rgba(74,219,150,0.15); color: var(--green); }
+  .btn-a.active { border-color: rgba(74,219,150,0.5); background: rgba(74,219,150,0.08); }
+  .btn-b { color: var(--red); }
+  .btn-b .badge { background: rgba(255,94,125,0.15); color: var(--red); }
+  .btn-b.active { border-color: rgba(255,94,125,0.5); background: rgba(255,94,125,0.08); }
+
+  .btn-loop-toggle {
+    width: 100%; padding: 14px;
+    border-radius: 12px; border: 1.5px solid var(--border2);
+    background: var(--surface2);
+    cursor: pointer; color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.2s; margin-bottom: 8px;
+  }
+  .btn-loop-toggle.active {
+    border-color: rgba(124,109,255,0.4);
+    background: rgba(124,109,255,0.1);
+    color: var(--accent2);
+  }
+  .btn-loop-toggle:active { transform: scale(0.98); }
+
+  .btn-clear {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    width: 100%; padding: 6px; display: none;
+  }
+  .btn-clear.visible { display: block; }
+
+  /* Speed */
+  .speed-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .speed-label { font-size: 13px; font-weight: 600; color: var(--text2); }
+  .speed-value {
+    font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
+    color: var(--accent2);
+  }
+  .speed-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .speed-limit { font-size: 11px; color: var(--text3); white-space: nowrap; }
+  input[type=range] {
+    flex: 1; -webkit-appearance: none; height: 4px;
+    background: var(--surface3); border-radius: 2px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px;
+    border-radius: 50%; background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    cursor: pointer;
+  }
+  .speed-presets { display: flex; gap: 8px; }
+  .btn-preset {
+    flex: 1; padding: 6px 0;
+    border-radius: 20px; border: none;
+    background: var(--surface3); color: var(--text3);
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-preset.active {
+    background: rgba(124,109,255,0.2); color: var(--accent2);
+  }
+  .btn-preset:active { transform: scale(0.95); }
+
+  /* Free loops counter */
+  .free-counter {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+  }
+  .free-dots { display: flex; gap: 6px; }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--green); transition: background 0.3s;
+  }
+  .dot.used { background: var(--red); }
+  .free-text { font-size: 13px; color: var(--text2); }
+  .free-text strong { color: var(--text); }
+
+  /* Save button */
+  .btn-save {
+    width: 100%; padding: 14px;
+    border-radius: 12px; border: none;
+    background: var(--accent);
+    color: white; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer; display: none;
+    box-shadow: 0 4px 24px rgba(124,109,255,0.3);
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-save.visible { display: block; }
+  .btn-save:active { transform: scale(0.98); }
+
+  /* Saved loops */
+  .section-header {
+    font-size: 11px; font-weight: 700; color: var(--text3);
+    letter-spacing: 1.2px; text-transform: uppercase;
+    margin: 20px 0 10px;
+  }
+  .saved-loop-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .saved-loop-item:hover { border-color: var(--border2); background: var(--surface2); }
+  .saved-loop-item:active { transform: scale(0.99); }
+  .loop-thumb {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .loop-info { flex: 1; min-width: 0; }
+  .loop-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .loop-meta { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 2px; }
+  .btn-delete-loop {
+    background: var(--surface3); border: none; cursor: pointer;
+    color: var(--text3); width: 28px; height: 28px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.15s; font-size: 12px;
+  }
+  .btn-delete-loop:hover { background: rgba(255,94,125,0.15); color: var(--red); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: rgba(20,20,32,0.95); backdrop-filter: blur(20px);
+    color: var(--text); padding: 10px 20px; border-radius: 30px;
+    font-size: 13px; font-weight: 600;
+    border: 1px solid var(--border2);
+    opacity: 0; transition: all 0.3s ease;
+    white-space: nowrap; pointer-events: none; z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Paywall modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px); z-index: 200;
+    display: none; align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: 24px 24px 0 0;
+    padding: 32px 24px 48px; width: 100%; max-width: 480px;
+    border-top: 1px solid var(--border2);
+    animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 36px; height: 4px; background: var(--border2);
+    border-radius: 2px; margin: 0 auto 24px;
+  }
+  .modal-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .modal-sub { font-size: 14px; color: var(--text2); text-align: center; margin-bottom: 24px; }
+  .modal-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
+  .modal-dot {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--red);
+  }
+  .modal-dot.remaining { background: var(--green); }
+  .modal-features { margin-bottom: 24px; }
+  .modal-feature {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .modal-feature:last-child { border-bottom: none; }
+  .feature-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    flex-shrink: 0;
+  }
+  .feature-text { font-size: 14px; font-weight: 500; }
+  .feature-sub { font-size: 12px; color: var(--text3); }
+  .modal-price { text-align: center; margin-bottom: 20px; }
+  .price-amount { font-size: 44px; font-weight: 700; line-height: 1; }
+  .price-note { font-size: 13px; color: var(--text3); margin-top: 4px; }
+  .btn-unlock {
+    width: 100%; padding: 16px;
+    background: var(--accent); color: white;
+    border: none; border-radius: 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
+    cursor: pointer; margin-bottom: 12px;
+    box-shadow: 0 4px 24px rgba(124,109,255,0.35);
+    transition: all 0.2s;
+  }
+  .btn-unlock:active { transform: scale(0.98); }
+  .btn-dismiss {
+    width: 100%; padding: 12px;
+    background: none; border: none;
+    color: var(--text3); font-family: 'DM Sans', sans-serif;
+    font-size: 14px; cursor: pointer;
+  }
+
+  /* Hidden player */
+  #audio { display: none; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 32px 0; color: var(--text3);
+  }
+  .empty-state .icon { font-size: 36px; margin-bottom: 8px; }
+  .empty-state p { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="blob-container">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">loop<span>.</span></div>
+    <div class="free-badge" id="freeBadge">5 free loops</div>
+  </div>
+
+  <!-- Upload -->
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="audio/*">
+    <span class="upload-icon">🎵</span>
+    <div class="upload-title">Drop a track to practice</div>
+    <div class="upload-sub">or tap to browse your files</div>
+    <div class="upload-formats">MP3 · M4A · WAV · AAC · OGG</div>
+  </div>
+
+  <!-- Player (hidden until track loaded) -->
+  <div id="playerSection" style="display:none">
+
+    <!-- Track info -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="track-info">
+          <div class="track-thumb" id="trackThumb">🎵</div>
+          <div class="track-meta">
+            <div class="track-title" id="trackTitle">No track loaded</div>
+            <div class="track-sub" id="trackSub">Upload a file to start</div>
+            <div class="loop-pill" id="loopPill" style="display:none">↺ LOOPING</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waveform -->
+      <div class="waveform-wrap">
+        <canvas id="waveform"></canvas>
+        <div class="time-row">
+          <span class="time-mono" id="currentTime">0:00</span>
+          <div class="loop-range-badge" id="loopRangeBadge">
+            <span class="a">A</span>
+            <span class="t" id="loopA">—</span>
+            <span class="b">B</span>
+            <span class="t" id="loopB">—</span>
+          </div>
+          <span class="time-mono" id="totalTime">0:00</span>
+        </div>
+      </div>
+
+      <!-- Transport -->
+      <div class="transport">
+        <button class="btn-icon" onclick="skip(-10)" title="Back 10s">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
+            <text x="8" y="15" font-size="5" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="bold">10</text>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="seekTo(0)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="3" height="16"/><polygon points="8,4 22,12 8,20"/></svg>
+        </button>
+        <button class="btn-play" id="playBtn" onclick="togglePlay()">
+          <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+          <svg id="pauseIcon" width="28" height="28" viewBox="0 0 24 24" fill="white" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+        <button class="btn-icon" onclick="skip(10)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-.49-3.51"/>
+            <text x="8" y="15" font-size="5" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="bold">10</text>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="triggerUpload()" title="Load new track">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loop controls -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="loop-grid">
+          <button class="btn-loop btn-a" id="btnA" onclick="setA()">
+            <span class="badge">A</span> Set Start
+          </button>
+          <button class="btn-loop btn-b" id="btnB" onclick="setB()">
+            Set End <span class="badge">B</span>
+          </button>
+        </div>
+        <button class="btn-loop-toggle" id="loopToggle" onclick="toggleLoop()">
+          ↺ Loop Off
+        </button>
+        <button class="btn-clear" id="btnClear" onclick="clearPoints()">
+          Clear loop points
+        </button>
+      </div>
+    </div>
+
+    <!-- Speed -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="speed-header">
+          <span class="speed-label">Playback Speed</span>
+          <span class="speed-value" id="speedVal">1x</span>
+        </div>
+        <div class="speed-row">
+          <span class="speed-limit">0.5x</span>
+          <input type="range" id="speedSlider" min="0.5" max="1.25" step="0.05" value="1"
+            oninput="setSpeed(parseFloat(this.value))">
+          <span class="speed-limit">1.25x</span>
+        </div>
+        <div class="speed-presets">
+          <button class="btn-preset" onclick="setSpeed(0.5)">0.5x</button>
+          <button class="btn-preset" onclick="setSpeed(0.75)">0.75x</button>
+          <button class="btn-preset active" id="preset1" onclick="setSpeed(1)">1x</button>
+          <button class="btn-preset" onclick="setSpeed(1.25)">1.25x</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Free counter + save -->
+    <div class="free-counter" id="freeCounter">
+      <div class="free-dots" id="freeDots"></div>
+      <div class="free-text" id="freeText">5 free loops remaining</div>
+    </div>
+    <button class="btn-save" id="btnSave" onclick="promptSaveLoop()">
+      💾 Save this loop
+    </button>
+
+    <!-- Saved loops -->
+    <div id="savedSection">
+      <div class="section-header">My Loops</div>
+      <div id="savedList">
+        <div class="empty-state">
+          <div class="icon">↺</div>
+          <p>No saved loops yet</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Paywall modal -->
+<div class="modal-overlay" id="paywallModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Unlock Loop Pro</div>
+    <div class="modal-sub">You've used all 5 free loops.</div>
+    <div class="modal-dots" id="modalDots"></div>
+    <div class="modal-features">
+      <div class="modal-feature">
+        <div class="feature-icon">🔖</div>
+        <div>
+          <div class="feature-text">Unlimited saved loops</div>
+          <div class="feature-sub">Save and name every loop</div>
+        </div>
+      </div>
+      <div class="modal-feature">
+        <div class="feature-icon">📁</div>
+        <div>
+          <div class="feature-text">Loop folders</div>
+          <div class="feature-sub">Organise into playlists</div>
+        </div>
+      </div>
+      <div class="modal-feature">
+        <div class="feature-icon">🔗</div>
+        <div>
+          <div class="feature-text">Join loops</div>
+          <div class="feature-sub">Chain loops together</div>
+        </div>
+      </div>
+      <div class="modal-feature">
+        <div class="feature-icon">⚡</div>
+        <div>
+          <div class="feature-text">Speed control</div>
+          <div class="feature-sub">0.5x to 1.25x playback</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-price">
+      <div class="price-amount" id="priceDisplay">₹49</div>
+      <div class="price-note">one-time · no subscription ever</div>
+    </div>
+    <button class="btn-unlock" onclick="handlePurchase()">Unlock Loop Pro</button>
+    <button class="btn-dismiss" onclick="closePaywall()">Maybe later</button>
+  </div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+// ── State ──────────────────────────────────────────────
+const audio = document.getElementById('audio');
+let state = {
+  loaded: false,
+  playing: false,
+  pointA: null,
+  pointB: null,
+  looping: false,
+  speed: 1.0,
+  duration: 0,
+  waveformData: [],
+  loopsUsed: parseInt(localStorage.getItem('loops_used') || '0'),
+  isPro: localStorage.getItem('is_pro') === 'true',
+  savedLoops: JSON.parse(localStorage.getItem('saved_loops') || '[]'),
+  currentFile: null,
+};
+
+const FREE_LIMIT = 5;
+
+// ── Init ───────────────────────────────────────────────
+function init() {
+  renderFreeDots();
+  renderSavedLoops();
+  updatePriceForRegion();
+
+  // File input
+  document.getElementById('fileInput').addEventListener('change', e => {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+
+  // Drag and drop
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+  });
+
+  // Waveform click
+  document.getElementById('waveform').addEventListener('click', onWaveformClick);
+  document.getElementById('waveform').addEventListener('touchstart', onWaveformTouch, {passive: true});
+
+  // Audio events
+  audio.addEventListener('timeupdate', onTimeUpdate);
+  audio.addEventListener('loadedmetadata', onLoaded);
+  audio.addEventListener('ended', onEnded);
+}
+
+function updatePriceForRegion() {
+  const lang = navigator.language || '';
+  const isIndia = lang.includes('en-IN') || Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Calcutta' || Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Kolkata';
+  document.getElementById('priceDisplay').textContent = isIndia ? '₹49' : '$1.49';
+}
+
+// ── File Loading ───────────────────────────────────────
+function loadFile(file) {
+  const url = URL.createObjectURL(file);
+  audio.src = url;
+  audio.load();
+  state.currentFile = file;
+  state.pointA = null;
+  state.pointB = null;
+  state.looping = false;
+  state.playing = false;
+
+  const name = file.name.replace(/\.[^/.]+$/, '');
+  document.getElementById('trackTitle').textContent = name;
+  document.getElementById('trackSub').textContent = formatBytes(file.size) + ' · ' + file.type.split('/')[1]?.toUpperCase();
+  document.getElementById('uploadZone').style.display = 'none';
+  document.getElementById('playerSection').style.display = 'block';
+
+  updateUI();
+  toast('🎵 ' + name + ' loaded');
+}
+
+function triggerUpload() {
+  document.getElementById('fileInput').click();
+}
+
+function formatBytes(b) {
+  return b > 1e6 ? (b/1e6).toFixed(1) + ' MB' : (b/1e3).toFixed(0) + ' KB';
+}
+
+// ── Audio Events ───────────────────────────────────────
+function onLoaded() {
+  state.duration = audio.duration;
+  state.loaded = true;
+  document.getElementById('totalTime').textContent = formatTime(state.duration);
+  generateWaveform();
+}
+
+function onTimeUpdate() {
+  const t = audio.currentTime;
+  document.getElementById('currentTime').textContent = formatTime(t);
+  drawWaveform(t / state.duration);
+
+  // Loop enforcement
+  if (state.looping && state.pointA !== null && state.pointB !== null) {
+    if (t >= state.pointB) {
+      audio.currentTime = state.pointA;
+      if (state.playing) audio.play();
+    }
+  }
+}
+
+function onEnded() {
+  state.playing = false;
+  updatePlayButton();
+  if (state.looping && state.pointA !== null) {
+    audio.currentTime = state.pointA;
+    audio.play();
+    state.playing = true;
+    updatePlayButton();
+  }
+}
+
+// ── Transport ──────────────────────────────────────────
+function togglePlay() {
+  if (!state.loaded) { toast('Upload a track first'); return; }
+  if (state.playing) {
+    audio.pause();
+    state.playing = false;
+  } else {
+    audio.playbackRate = state.speed;
+    audio.play();
+    state.playing = true;
+  }
+  updatePlayButton();
+}
+
+function skip(secs) {
+  audio.currentTime = Math.max(0, Math.min(state.duration, audio.currentTime + secs));
+}
+
+function seekTo(t) {
+  audio.currentTime = t;
+}
+
+function updatePlayButton() {
+  document.getElementById('playIcon').style.display = state.playing ? 'none' : 'block';
+  document.getElementById('pauseIcon').style.display = state.playing ? 'block' : 'none';
+  document.getElementById('trackThumb').classList.toggle('playing', state.playing);
+}
+
+// ── Loop Controls ──────────────────────────────────────
+function setA() {
+  if (!state.loaded) { toast('Upload a track first'); return; }
+  state.pointA = audio.currentTime;
+  if (state.pointB !== null && state.pointB <= state.pointA) {
+    state.pointB = null;
+    state.looping = false;
+  }
+  document.getElementById('btnA').classList.add('active');
+  document.getElementById('btnClear').classList.add('visible');
+  updateLoopBadge();
+  updateSaveButton();
+  toast('A set at ' + formatTime(state.pointA));
+  vibrate();
+}
+
+function setB() {
+  if (!state.loaded) { toast('Upload a track first'); return; }
+  if (state.pointA === null) { toast('Set A first'); return; }
+  if (audio.currentTime <= state.pointA) { toast('B must be after A'); return; }
+  state.pointB = audio.currentTime;
+  document.getElementById('btnB').classList.add('active');
+
+  // Auto-enable loop
+  state.looping = true;
+  updateLoopToggle();
+  updateLoopBadge();
+  updateSaveButton();
+  toast('B set — loop enabled ↺');
+  vibrate();
+}
+
+function toggleLoop() {
+  if (!state.loaded) return;
+  if (state.pointA === null || state.pointB === null) {
+    toast('Set A and B points first');
+    return;
+  }
+  state.looping = !state.looping;
+  updateLoopToggle();
+  toast(state.looping ? '↺ Looping' : 'Loop paused');
+}
+
+function updateLoopToggle() {
+  const btn = document.getElementById('loopToggle');
+  const pill = document.getElementById('loopPill');
+  if (state.looping) {
+    btn.classList.add('active');
+    btn.textContent = '↺ Looping — tap to pause';
+    pill.style.display = 'inline-flex';
+  } else if (state.pointA !== null && state.pointB !== null) {
+    btn.classList.remove('active');
+    btn.textContent = '↺ Loop ready — tap to start';
+    pill.style.display = 'none';
+  } else {
+    btn.classList.remove('active');
+    btn.textContent = '↺ Loop Off';
+    pill.style.display = 'none';
+  }
+}
+
+function clearPoints() {
+  state.pointA = null;
+  state.pointB = null;
+  state.looping = false;
+  document.getElementById('btnA').classList.remove('active');
+  document.getElementById('btnB').classList.remove('active');
+  document.getElementById('btnClear').classList.remove('visible');
+  document.getElementById('loopRangeBadge').classList.remove('visible');
+  document.getElementById('loopPill').style.display = 'none';
+  updateLoopToggle();
+  updateSaveButton();
+  toast('Loop cleared');
+}
+
+function updateLoopBadge() {
+  const badge = document.getElementById('loopRangeBadge');
+  if (state.pointA !== null && state.pointB !== null) {
+    badge.classList.add('visible');
+    document.getElementById('loopA').textContent = formatTime(state.pointA);
+    document.getElementById('loopB').textContent = formatTime(state.pointB);
+  }
+}
+
+// ── Speed ──────────────────────────────────────────────
+function setSpeed(val) {
+  state.speed = val;
+  audio.playbackRate = val;
+  document.getElementById('speedVal').textContent = val + 'x';
+  document.getElementById('speedSlider').value = val;
+  document.querySelectorAll('.btn-preset').forEach(b => {
+    b.classList.toggle('active', parseFloat(b.textContent) === val);
+  });
+}
+
+// ── Save Loop ──────────────────────────────────────────
+function updateSaveButton() {
+  const visible = state.pointA !== null && state.pointB !== null;
+  document.getElementById('btnSave').classList.toggle('visible', visible);
+}
+
+function promptSaveLoop() {
+  if (state.loopsUsed >= FREE_LIMIT && !state.isPro) {
+    openPaywall();
+    return;
+  }
+  const name = prompt('Name this loop:', document.getElementById('trackTitle').textContent);
+  if (name === null) return; // cancelled
+  saveLoop(name || document.getElementById('trackTitle').textContent);
+}
+
+function saveLoop(name) {
+  const loop = {
+    id: Date.now(),
+    name,
+    trackName: document.getElementById('trackTitle').textContent,
+    pointA: state.pointA,
+    pointB: state.pointB,
+    speed: state.speed,
+    duration: state.pointB - state.pointA,
+  };
+  state.savedLoops.unshift(loop);
+  localStorage.setItem('saved_loops', JSON.stringify(state.savedLoops));
+
+  if (!state.isPro) {
+    state.loopsUsed++;
+    localStorage.setItem('loops_used', state.loopsUsed);
+  }
+
+  renderFreeDots();
+  renderSavedLoops();
+  const remaining = Math.max(0, FREE_LIMIT - state.loopsUsed);
+  toast('💾 Saved! ' + (state.isPro ? '' : remaining + ' free remaining'));
+}
+
+function deleteLoop(id) {
+  state.savedLoops = state.savedLoops.filter(l => l.id !== id);
+  localStorage.setItem('saved_loops', JSON.stringify(state.savedLoops));
+  renderSavedLoops();
+  toast('Loop deleted');
+}
+
+function loadSavedLoop(loop) {
+  state.pointA = loop.pointA;
+  state.pointB = loop.pointB;
+  state.looping = true;
+  setSpeed(loop.speed);
+  if (state.loaded) {
+    audio.currentTime = loop.pointA;
+  }
+  document.getElementById('btnA').classList.add('active');
+  document.getElementById('btnB').classList.add('active');
+  document.getElementById('btnClear').classList.add('visible');
+  updateLoopToggle();
+  updateLoopBadge();
+  updateSaveButton();
+  toast('↺ Loaded: ' + loop.name);
+}
+
+function renderSavedLoops() {
+  const list = document.getElementById('savedList');
+  if (state.savedLoops.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">↺</div><p>No saved loops yet</p></div>';
+    return;
+  }
+  list.innerHTML = state.savedLoops.map(loop => `
+    <div class="saved-loop-item" onclick="loadSavedLoop(${JSON.stringify(loop).replace(/"/g, '&quot;')})">
+      <div class="loop-thumb">🔁</div>
+      <div class="loop-info">
+        <div class="loop-name">${loop.name}</div>
+        <div class="loop-meta">${formatTime(loop.pointA)} → ${formatTime(loop.pointB)} · ${loop.speed}x · ${formatTime(loop.duration)}</div>
+      </div>
+      <button class="btn-delete-loop" onclick="event.stopPropagation(); deleteLoop(${loop.id})">✕</button>
+    </div>
+  `).join('');
+}
+
+// ── Free dots ──────────────────────────────────────────
+function renderFreeDots() {
+  const dotsEl = document.getElementById('freeDots');
+  const textEl = document.getElementById('freeText');
+  const badge = document.getElementById('freeBadge');
+
+  if (state.isPro) {
+    document.getElementById('freeCounter').style.display = 'none';
+    badge.textContent = 'PRO';
+    badge.style.background = 'rgba(74,219,150,0.15)';
+    badge.style.color = '#4adb96';
+    return;
+  }
+
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < FREE_LIMIT; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i < state.loopsUsed ? ' used' : '');
+    dotsEl.appendChild(dot);
+  }
+
+  const remaining = Math.max(0, FREE_LIMIT - state.loopsUsed);
+  textEl.innerHTML = `<strong>${remaining}</strong> free loop${remaining !== 1 ? 's' : ''} remaining`;
+  badge.textContent = remaining + ' free';
+
+  // Modal dots too
+  const modalDots = document.getElementById('modalDots');
+  if (modalDots) {
+    modalDots.innerHTML = '';
+    for (let i = 0; i < FREE_LIMIT; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'modal-dot' + (i >= state.loopsUsed ? ' remaining' : '');
+      modalDots.appendChild(dot);
+    }
+  }
+}
+
+// ── Paywall ────────────────────────────────────────────
+function openPaywall() {
+  renderFreeDots();
+  document.getElementById('paywallModal').classList.add('show');
+}
+
+function closePaywall() {
+  document.getElementById('paywallModal').classList.remove('show');
+}
+
+function handlePurchase() {
+  // In production: integrate with Stripe or Apple Pay
+  // For testing, simulate success
+  const confirmed = confirm('This will open payment. For now, tap OK to simulate purchase (test mode).');
+  if (confirmed) {
+    state.isPro = true;
+    localStorage.setItem('is_pro', 'true');
+    renderFreeDots();
+    closePaywall();
+    toast('🎉 Loop Pro unlocked!');
+  }
+}
+
+// ── Waveform ───────────────────────────────────────────
+function generateWaveform() {
+  // Try to decode audio for real waveform
+  if (state.currentFile) {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const buffer = await ctx.decodeAudioData(e.target.result);
+        const data = buffer.getChannelData(0);
+        const samples = 100;
+        const blockSize = Math.floor(data.length / samples);
+        state.waveformData = [];
+        for (let i = 0; i < samples; i++) {
+          let sum = 0;
+          for (let j = 0; j < blockSize; j++) {
+            sum += Math.abs(data[i * blockSize + j]);
+          }
+          state.waveformData.push(sum / blockSize);
+        }
+        // Normalize
+        const max = Math.max(...state.waveformData);
+        state.waveformData = state.waveformData.map(v => v / max);
+        ctx.close();
+        drawWaveform(0);
+      } catch(err) {
+        generateSyntheticWaveform();
+      }
+    };
+    reader.readAsArrayBuffer(state.currentFile);
+  } else {
+    generateSyntheticWaveform();
+  }
+}
+
+function generateSyntheticWaveform() {
+  state.waveformData = Array.from({length: 100}, (_, i) =>
+    0.2 + 0.7 * Math.abs(Math.sin(i * 0.4 + 0.3))
+  );
+  drawWaveform(0);
+}
+
+function drawWaveform(progress) {
+  const canvas = document.getElementById('waveform');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.offsetWidth;
+  const h = 60;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const bars = state.waveformData.length || 100;
+  const barW = Math.max(2, (w - bars) / bars);
+  const gap = w / bars - barW;
+  const aFrac = state.pointA !== null ? state.pointA / state.duration : null;
+  const bFrac = state.pointB !== null ? state.pointB / state.duration : null;
+
+  // Loop region background
+  if (aFrac !== null && bFrac !== null) {
+    ctx.fillStyle = state.looping ? 'rgba(124,109,255,0.12)' : 'rgba(124,109,255,0.06)';
+    ctx.beginPath();
+    ctx.roundRect(aFrac * w, 0, (bFrac - aFrac) * w, h, 4);
+    ctx.fill();
+
+    // A line
+    ctx.fillStyle = '#4adb96';
+    ctx.fillRect(aFrac * w - 1, 0, 2, h);
+
+    // B line
+    ctx.fillStyle = '#ff5e7d';
+    ctx.fillRect(bFrac * w - 1, 0, 2, h);
+  }
+
+  // Bars
+  for (let i = 0; i < bars; i++) {
+    const x = i * (barW + gap);
+    const barProgress = i / bars;
+    const amp = state.waveformData[i] || 0.3;
+    const barH = Math.max(3, amp * (h - 8));
+    const y = (h - barH) / 2;
+
+    const inLoop = aFrac !== null && bFrac !== null && barProgress >= aFrac && barProgress <= bFrac;
+    let color;
+    if (inLoop) {
+      color = state.looping ? 'rgba(165,153,255,0.9)' : 'rgba(165,153,255,0.5)';
+    } else if (barProgress < progress) {
+      color = 'rgba(255,255,255,0.5)';
+    } else {
+      color = 'rgba(255,255,255,0.12)';
+    }
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, barH, 2);
+    ctx.fill();
+  }
+
+  // Playhead
+  const headX = progress * w;
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.fillRect(headX - 1, 0, 2, h);
+}
+
+function onWaveformClick(e) {
+  if (!state.loaded) return;
+  const canvas = document.getElementById('waveform');
+  const rect = canvas.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * state.duration;
+}
+
+function onWaveformTouch(e) {
+  if (!state.loaded) return;
+  const canvas = document.getElementById('waveform');
+  const rect = canvas.getBoundingClientRect();
+  const pct = (e.touches[0].clientX - rect.left) / rect.width;
+  audio.currentTime = Math.max(0, Math.min(1, pct)) * state.duration;
+}
+
+// ── Helpers ────────────────────────────────────────────
+function formatTime(s) {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + String(sec).padStart(2, '0');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function vibrate() {
+  if (navigator.vibrate) navigator.vibrate(30);
+}
+
+function updateUI() {
+  updatePlayButton();
+  updateLoopToggle();
+}
+
+// ── Start ──────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
