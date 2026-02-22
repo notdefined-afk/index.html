@@ -757,20 +757,21 @@
   <div id="tab-simulator" class="panel">
 
     <!-- Product picker -->
-    <div class="card" style="padding:16px 20px;margin-bottom:16px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+    <div class="card" style="padding:12px 16px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
         <div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">Select a product to simulate</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;">Pick any product — adjust the price and see your rating change in real time</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);">Select a product to simulate</div>
+          <div style="font-size:11px;color:var(--muted);">Pick any product — adjust the price and see your rating change in real time</div>
         </div>
-        <div style="display:flex;gap:6px;align-items:center;">
+        <div style="display:flex;gap:4px;align-items:center;">
           <span style="font-size:11px;color:var(--muted);margin-right:4px;">Sort by:</span>
-          <button id="sort-revenue" onclick="setSortPicker('revenue')" style="padding:5px 10px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer;font-family:var(--sans);">Revenue</button>
-          <button id="sort-margin" onclick="setSortPicker('margin')" style="padding:5px 10px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:var(--sans);">Gross margin</button>
-          <button id="sort-units" onclick="setSortPicker('units')" style="padding:5px 10px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:var(--sans);">Units sold</button>
+          <button id="sort-revenue" onclick="setSortPicker('revenue')" style="padding:4px 8px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer;font-family:var(--sans);">Revenue</button>
+          <button id="sort-margin" onclick="setSortPicker('margin')" style="padding:4px 8px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:var(--sans);">Gross margin</button>
+          <button id="sort-units" onclick="setSortPicker('units')" style="padding:4px 8px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:var(--sans);">Units sold</button>
         </div>
       </div>
-      <div id="product-picker" style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;padding-right:4px;"></div>
+      <input id="picker-search" type="text" placeholder="Search by product name or category…" oninput="renderPicker()" style="width:100%;padding:7px 10px;font-size:12px;font-family:var(--sans);border:1px solid var(--border);border-radius:4px;margin-bottom:8px;outline:none;color:var(--text);">
+      <div id="product-picker" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;padding-right:4px;"></div>
     </div>
 
     <div class="sim-layout">
@@ -797,7 +798,7 @@
         <div class="input-group">
           <label class="input-label">Number of active sellers on this listing</label>
           <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fafafa;border:1px solid var(--border);border-radius:6px;">
-            <span style="font-size:15px;font-weight:600;color:var(--text);">8</span>
+            <span id="sim-sellers-val" style="font-size:15px;font-weight:600;color:var(--text);">14</span>
             <span style="font-size:11px;color:var(--muted);">Fetched from bol · Updates when you search for a product</span>
           </div>
           <div style="font-size:11px;color:var(--muted);margin-top:4px;">More competing sellers makes the buy box harder to win, even at the right price.</div>
@@ -806,7 +807,7 @@
         <div class="input-group">
           <label class="input-label">Your seller rating</label>
           <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fafafa;border:1px solid var(--border);border-radius:6px;">
-            <span style="font-size:15px;font-weight:600;color:var(--text);">8.4 / 10</span>
+            <span id="sim-rating-val" style="font-size:15px;font-weight:600;color:var(--text);">7.8 / 10</span>
             <span style="font-size:11px;color:var(--muted);">From your Partner Dashboard · Performance tab</span>
           </div>
           <div style="font-size:11px;color:var(--muted);margin-top:4px;">Bol weighs your rating alongside price when deciding who wins the buy box.</div>
@@ -1279,14 +1280,14 @@
 
   // ─── product data (fixed, realistic, category-labelled) ──────────────────────
   const products = [
-    { name: 'Dyson V15 Detect Absolute',          ean: '5025155069882', cat: 'Home',         listed: 619.00, market: 449.00, cost: 380.00, units: 142 },
-    { name: 'Samsung Galaxy Tab S9 FE',           ean: '8806095160368', cat: 'Electronics',  listed: 379.00, market: 299.00, cost: 240.00, units: 98  },
-    { name: 'LEGO Technic 42143 Ferrari Daytona', ean: '5702017117492', cat: 'Toys',         listed: 229.99, market: 199.99, cost: 148.00, units: 87  },
-    { name: 'Oral-B iO Series 7 Elektrische',     ean: '4210201409052', cat: 'Personal care',listed: 189.00, market: 149.00, cost: 92.00,  units: 74  },
-    { name: 'Kindle Paperwhite (16 GB)',           ean: 'B09TMF6475',   cat: 'Electronics',  listed: 159.99, market: 159.99, cost: 98.00,  units: 61  },
-    { name: 'Philips Airfryer XXL HD9630',        ean: '8720389002380', cat: 'Kitchen',      listed: 149.95, market: 139.00, cost: 89.00,  units: 53  },
-    { name: 'Nike Air Max 270 (maat 42)',          ean: '0842778139460', cat: 'Fashion',      listed: 119.95, market: 109.99, cost: 62.00,  units: 38  },
-    { name: 'Nespresso Vertuo Next ENV120',        ean: '7630041682610', cat: 'Kitchen',      listed: 79.99,  market: 77.00,  cost: 44.00,  units: 29  },
+    { name: 'Dyson V15 Detect Absolute',          ean: '5025155069882', cat: 'Home',         listed: 619.00, market: 449.00, cost: 380.00, units: 142, sellers: 14, rating: 7.8 },
+    { name: 'Samsung Galaxy Tab S9 FE',           ean: '8806095160368', cat: 'Electronics',  listed: 379.00, market: 299.00, cost: 240.00, units: 98,  sellers: 22, rating: 8.1 },
+    { name: 'LEGO Technic 42143 Ferrari Daytona', ean: '5702017117492', cat: 'Toys',         listed: 229.99, market: 199.99, cost: 148.00, units: 87,  sellers: 9,  rating: 9.2 },
+    { name: 'Oral-B iO Series 7 Elektrische',     ean: '4210201409052', cat: 'Personal care',listed: 189.00, market: 149.00, cost: 92.00,  units: 74,  sellers: 18, rating: 8.6 },
+    { name: 'Kindle Paperwhite (16 GB)',           ean: 'B09TMF6475',   cat: 'Electronics',  listed: 159.99, market: 159.99, cost: 98.00,  units: 61,  sellers: 5,  rating: 9.4 },
+    { name: 'Philips Airfryer XXL HD9630',        ean: '8720389002380', cat: 'Kitchen',      listed: 149.95, market: 139.00, cost: 89.00,  units: 53,  sellers: 11, rating: 8.9 },
+    { name: 'Nike Air Max 270 (maat 42)',          ean: '0842778139460', cat: 'Fashion',      listed: 119.95, market: 109.99, cost: 62.00,  units: 38,  sellers: 7,  rating: 8.3 },
+    { name: 'Nespresso Vertuo Next ENV120',        ean: '7630041682610', cat: 'Kitchen',      listed: 79.99,  market: 77.00,  cost: 44.00,  units: 29,  sellers: 4,  rating: 9.1 },
   ];
 
   function getStars(listed, market) {
@@ -1350,15 +1351,22 @@
     const picker = document.getElementById('product-picker');
     if (!picker) return;
 
+    const query = (document.getElementById('picker-search')?.value || '').toLowerCase();
+
     const sorted = [...products].map((p, origIdx) => ({...p, origIdx})).sort((a, b) => {
       if (currentSort === 'revenue') return (b.listed * b.units) - (a.listed * a.units);
       if (currentSort === 'margin') return ((b.listed - b.cost) / b.listed) - ((a.listed - a.cost) / a.listed);
       return b.units - a.units;
-    });
+    }).filter(p => !query || p.name.toLowerCase().includes(query) || p.cat.toLowerCase().includes(query));
 
     const sortLabel = {revenue:'Weekly revenue', margin:'Gross margin', units:'Units/wk'};
 
     picker.innerHTML = '';
+
+    if (sorted.length === 0) {
+      picker.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--muted);text-align:center;">No products match "${document.getElementById('picker-search').value}"</div>`;
+      return;
+    }
     sorted.forEach((p, rank) => {
       const stars = getStars(p.listed, p.market);
       const statusColor = {5:'var(--green)',4:'var(--green)',3:'var(--yellow)',2:'var(--orange)',1:'var(--red)'}[stars];
@@ -1370,17 +1378,17 @@
       const metaVal = currentSort === 'revenue' ? revenue : currentSort === 'margin' ? margin : unitsVal;
 
       const row = document.createElement('div');
-      row.style.cssText = `display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;gap:12px;transition:border-color 0.15s;`;
+      row.style.cssText = `display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:4px;border:1px solid var(--border);background:#fff;cursor:pointer;gap:12px;transition:border-color 0.15s;`;
       row.onclick = () => loadIntoSim(p.origIdx);
       row.innerHTML = `
-        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
-          <div style="font-size:12px;font-weight:700;color:var(--muted);min-width:22px;text-align:center;">#${rank+1}</div>
+        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);min-width:20px;text-align:center;">#${rank+1}</div>
           <div style="min-width:0;">
-            <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
             <div style="font-size:11px;color:var(--muted);">${p.cat} · <strong style="color:var(--text)">${metaVal}</strong></div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
           <span style="font-size:11px;font-weight:600;color:${statusColor};white-space:nowrap;">${statusLabel}</span>
           <span style="font-size:11px;color:var(--muted-light);">→</span>
         </div>`;
@@ -1394,6 +1402,9 @@
     document.getElementById('sim-your-price').value = p.listed;
     document.getElementById('sim-min-price').value  = p.market;
     document.getElementById('sim-cost').value       = p.cost;
+    // Update platform data fields
+    document.getElementById('sim-sellers-val').textContent = p.sellers;
+    document.getElementById('sim-rating-val').textContent  = p.rating.toFixed(1) + ' / 10';
     // Update header
     document.getElementById('sim-product-name').textContent = p.name;
     document.getElementById('sim-product-meta').textContent = `${p.cat} · ${p.units} units/wk · Market reference: €${p.market.toFixed(2)}`;
@@ -1406,8 +1417,8 @@
     const your     = parseFloat(document.getElementById('sim-your-price').value) || 0;
     const min      = parseFloat(document.getElementById('sim-min-price').value)  || 0;
     const cost     = parseFloat(document.getElementById('sim-cost').value)       || 0;
-    const sellers  = 8;   // platform data — not user input
-    const rating   = 8.4; // platform data — not user input
+    const sellers  = parseInt(document.getElementById('sim-sellers-val').textContent) || 8;
+    const rating   = parseFloat(document.getElementById('sim-rating-val').textContent) || 8.0;
     const delivery = parseInt(document.getElementById('sim-delivery').value);
 
     if (!your || !min || min <= 0) return;
