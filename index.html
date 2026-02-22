@@ -2,1156 +2,1495 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Loop — Practice Mode</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Classification — Partner Intelligence · bol</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #08080e;
-    --surface: #0f0f18;
-    --surface2: #141420;
-    --surface3: #1a1a28;
-    --accent: #7c6dff;
-    --accent2: #a599ff;
-    --accent-soft: rgba(124,109,255,0.12);
-    --green: #4adb96;
-    --red: #ff5e7d;
-    --text: #f0f0f8;
-    --text2: #9898b0;
-    --text3: #5a5a72;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --radius: 16px;
+    --blue: #0000FF;
+    --blue-light: #e8e8ff;
+    --blue-mid: #c0c0ff;
+    --bg: #f5f5f5;
+    --white: #ffffff;
+    --border: #e0e0e0;
+    --border-dark: #c8c8c8;
+    --text: #1a1a1a;
+    --muted: #767676;
+    --muted-light: #a0a0a0;
+    --green: #1a7a1a;
+    --green-bg: #e8f5e8;
+    --orange: #c45000;
+    --orange-bg: #fff0e0;
+    --red: #cc0000;
+    --red-bg: #ffe8e8;
+    --yellow: #8a6800;
+    --yellow-bg: #fff8e0;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
     min-height: 100vh;
-    max-width: 480px;
-    margin: 0 auto;
-    padding-bottom: 100px;
-    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* Background blobs */
-  .blob-container {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none; z-index: 0; overflow: hidden;
-    max-width: 480px; margin: 0 auto;
-  }
-  .blob {
-    position: absolute; border-radius: 50%;
-    filter: blur(80px); opacity: 0.12;
-  }
-  .blob-1 { width: 300px; height: 300px; background: var(--accent); top: -100px; right: -80px; }
-  .blob-2 { width: 200px; height: 200px; background: var(--green); bottom: 200px; left: -60px; }
-
-  .app { position: relative; z-index: 1; padding: 0 20px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
   /* Header */
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 56px 0 24px;
+  header {
+    background: var(--blue);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
   }
   .logo {
-    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #fff 30%, var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
-  .logo span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
-  .free-badge {
-    font-size: 11px; font-weight: 600; padding: 4px 10px;
-    background: var(--accent-soft); color: var(--accent2);
-    border-radius: 20px; border: 1px solid rgba(124,109,255,0.25);
-    font-family: 'DM Mono', monospace;
+  .logo-wordmark {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    font-style: italic;
+  }
+  .logo-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .logo-section {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .header-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
   }
 
-  /* Upload zone */
-  .upload-zone {
-    border: 2px dashed var(--border2);
-    border-radius: var(--radius);
-    padding: 40px 24px;
-    text-align: center;
+  /* Hero section */
+  .hero {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0 0;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: none;
+    margin-top: 0;
+  }
+  .tab {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.25s ease;
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: var(--sans);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+    font-weight: 600;
+  }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* Panel */
+  .panel { display: none; animation: fadeIn 0.2s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  /* Page content area */
+  .page-content { padding: 24px 0 48px; }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
     margin-bottom: 20px;
   }
-  .upload-zone:hover, .upload-zone.drag-over {
-    border-color: var(--accent);
-    background: var(--accent-soft);
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    position: relative;
   }
-  .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .upload-icon {
-    font-size: 40px; margin-bottom: 12px;
-    display: block;
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 6px 0 0 6px;
   }
-  .upload-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-  .upload-sub { font-size: 13px; color: var(--text3); }
-  .upload-formats {
-    margin-top: 12px; font-size: 11px; color: var(--text3);
-    font-family: 'DM Mono', monospace; letter-spacing: 0.5px;
+  .stat-card.green::after { background: #1a7a1a; }
+  .stat-card.yellow::after { background: #c4960a; }
+  .stat-card.orange::after { background: #c45000; }
+  .stat-card.red::after { background: #cc0000; }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--muted-light);
+  }
+
+  /* Main grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 16px;
+    margin-bottom: 20px;
   }
 
   /* Card */
   .card {
-    background: var(--surface);
+    background: var(--white);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 12px;
+    border-radius: 6px;
     overflow: hidden;
   }
-  .card-inner { padding: 16px; }
-
-  /* Track info */
-  .track-info {
-    display: flex; align-items: center; gap: 14px;
+  .card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
   }
-  .track-thumb {
-    width: 56px; height: 56px; border-radius: 12px;
-    background: var(--surface3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px; flex-shrink: 0;
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
   }
-  .track-thumb.playing { animation: pulse-thumb 2s ease-in-out infinite; }
-  @keyframes pulse-thumb {
-    0%,100% { box-shadow: 0 0 0 0 rgba(124,109,255,0.3); }
-    50% { box-shadow: 0 0 0 8px rgba(124,109,255,0); }
-  }
-  .track-meta { flex: 1; min-width: 0; }
-  .track-title { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-sub { font-size: 13px; color: var(--text3); margin-top: 2px; }
-  .loop-pill {
-    font-size: 10px; font-weight: 700; padding: 3px 8px;
-    background: var(--accent-soft); color: var(--accent2);
-    border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;
-    margin-top: 4px;
-    font-family: 'DM Mono', monospace;
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
   }
 
-  /* Waveform */
-  .waveform-wrap {
-    padding: 16px;
-    border-top: 1px solid var(--border);
+  /* Badges */
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.2px;
   }
-  #waveform {
-    width: 100%; height: 60px; cursor: pointer;
-    border-radius: 8px; overflow: hidden;
-  }
-  .time-row {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 10px;
-  }
-  .time-mono {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px; color: var(--text3);
-  }
-  .loop-range-badge {
-    display: none;
-    align-items: center; gap: 6px;
-    font-family: 'DM Mono', monospace; font-size: 11px;
-    background: var(--accent-soft); padding: 4px 10px; border-radius: 20px;
-  }
-  .loop-range-badge.visible { display: flex; }
-  .loop-range-badge .a { color: var(--green); font-weight: 700; }
-  .loop-range-badge .b { color: var(--red); font-weight: 700; }
-  .loop-range-badge .t { color: var(--text3); }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-orange { background: var(--orange-bg); color: var(--orange); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-gray { background: #f0f0f0; color: var(--muted); }
 
-  /* Transport */
-  .transport {
-    display: flex; align-items: center; justify-content: center;
-    gap: 24px; padding: 20px 0;
+  /* Table */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 9px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
   }
-  .btn-icon {
-    background: none; border: none; cursor: pointer;
-    color: var(--text2); padding: 8px;
-    border-radius: 50%; transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .btn-icon:hover { color: var(--text); background: var(--surface3); }
-  .btn-icon:active { transform: scale(0.92); }
-  .btn-play {
-    width: 64px; height: 64px; border-radius: 50%;
-    background: var(--accent);
-    border: none; cursor: pointer; color: white;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 32px rgba(124,109,255,0.4);
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafafa; }
+  tbody td { padding: 11px 16px; font-size: 13px; vertical-align: middle; }
+  .product-name { font-weight: 600; font-size: 13px; margin-bottom: 1px; color: var(--text); }
+  .product-ean { font-size: 11px; color: var(--muted-light); font-family: monospace; }
+
+  /* Stars */
+  .stars { display: flex; gap: 2px; align-items: center; }
+  .star { width: 9px; height: 9px; border-radius: 1px; }
+  .star.filled { background: #f5a623; }
+  .star.empty { background: #e0e0e0; }
+
+  /* Price */
+  .price-current { font-size: 13px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+  .price-market { font-size: 11px; color: var(--muted-light); font-variant-numeric: tabular-nums; }
+  .price-delta { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .delta-pos { color: var(--red); }
+  .delta-neg { color: var(--green); }
+
+  /* Action btn */
+  .action-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-dark);
+    background: var(--white);
+    color: var(--text);
+    cursor: pointer;
     transition: all 0.15s;
+    font-family: var(--sans);
   }
-  .btn-play:hover { transform: scale(1.05); }
-  .btn-play:active { transform: scale(0.95); }
-  .btn-play.playing { background: var(--accent); }
+  .action-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
 
-  /* Loop controls */
-  .loop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .btn-loop {
-    padding: 13px; border-radius: 12px;
-    border: 1.5px solid var(--border2);
-    background: var(--surface2);
-    cursor: pointer; color: var(--text2);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 600;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: all 0.2s;
+  /* Legend */
+  .legend-card { padding: 0; }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
   }
-  .btn-loop:active { transform: scale(0.97); }
-  .btn-loop .badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; font-weight: 700;
-    padding: 2px 6px; border-radius: 4px;
-  }
-  .btn-a { color: var(--green); }
-  .btn-a .badge { background: rgba(74,219,150,0.15); color: var(--green); }
-  .btn-a.active { border-color: rgba(74,219,150,0.5); background: rgba(74,219,150,0.08); }
-  .btn-b { color: var(--red); }
-  .btn-b .badge { background: rgba(255,94,125,0.15); color: var(--red); }
-  .btn-b.active { border-color: rgba(255,94,125,0.5); background: rgba(255,94,125,0.08); }
+  .legend-item:last-child { border-bottom: none; }
+  .legend-stars { display: flex; gap: 2px; margin-top: 2px; flex-shrink: 0; }
+  .legend-star { width: 10px; height: 10px; border-radius: 1px; background: #f5a623; }
+  .legend-star.empty { background: #e0e0e0; }
+  .legend-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--text); }
+  .legend-text p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .legend-impact { margin-left: auto; flex-shrink: 0; }
 
-  .btn-loop-toggle {
-    width: 100%; padding: 14px;
-    border-radius: 12px; border: 1.5px solid var(--border2);
-    background: var(--surface2);
-    cursor: pointer; color: var(--text2);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 600;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: all 0.2s; margin-bottom: 8px;
+  /* Opportunities */
+  .opp-list { }
+  .opp-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.1s;
+    cursor: default;
   }
-  .btn-loop-toggle.active {
-    border-color: rgba(124,109,255,0.4);
-    background: rgba(124,109,255,0.1);
-    color: var(--accent2);
-  }
-  .btn-loop-toggle:active { transform: scale(0.98); }
+  .opp-item:last-child { border-bottom: none; }
+  .opp-item:hover { background: #fafafa; }
+  .opp-left h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; color: var(--text); }
+  .opp-left p { font-size: 11px; color: var(--muted); }
+  .opp-right { text-align: right; flex-shrink: 0; margin-left: 16px; }
+  .opp-gain { font-size: 14px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+  .opp-type { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
 
-  .btn-clear {
-    background: none; border: none; cursor: pointer;
-    color: var(--text3); font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    width: 100%; padding: 6px; display: none;
+  /* Simulator */
+  .sim-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .input-group { margin-bottom: 18px; }
+  .input-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
   }
-  .btn-clear.visible { display: block; }
-
-  /* Speed */
-  .speed-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 12px;
+  .input-field {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
   }
-  .speed-label { font-size: 13px; font-weight: 600; color: var(--text2); }
-  .speed-value {
-    font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
-    color: var(--accent2);
+  .input-field:focus { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-light); }
+  .slider-row { display: flex; align-items: center; gap: 12px; }
+  .slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border-dark);
+    outline: none;
   }
-  .speed-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .speed-limit { font-size: 11px; color: var(--text3); white-space: nowrap; }
-  input[type=range] {
-    flex: 1; -webkit-appearance: none; height: 4px;
-    background: var(--surface3); border-radius: 2px; outline: none;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 22px; height: 22px;
-    border-radius: 50%; background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--blue);
     cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
-  .speed-presets { display: flex; gap: 8px; }
-  .btn-preset {
-    flex: 1; padding: 6px 0;
-    border-radius: 20px; border: none;
-    background: var(--surface3); color: var(--text3);
-    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
-    cursor: pointer; transition: all 0.15s;
+  .slider-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 36px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
   }
-  .btn-preset.active {
-    background: rgba(124,109,255,0.2); color: var(--accent2);
-  }
-  .btn-preset:active { transform: scale(0.95); }
 
-  /* Free loops counter */
-  .free-counter {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px;
-    background: var(--surface);
+  .sim-output {
+    background: var(--white);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 6px;
+    padding: 20px;
     margin-bottom: 12px;
   }
-  .free-dots { display: flex; gap: 6px; }
-  .dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--green); transition: background 0.3s;
+  .sim-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
   }
-  .dot.used { background: var(--red); }
-  .free-text { font-size: 13px; color: var(--text2); }
-  .free-text strong { color: var(--text); }
+  .sim-result-row:last-child { border-bottom: none; }
+  .sim-result-label { font-size: 12px; color: var(--muted); }
+  .sim-result-value { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
 
-  /* Save button */
-  .btn-save {
-    width: 100%; padding: 14px;
-    border-radius: 12px; border: none;
-    background: var(--accent);
-    color: white; font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 600;
-    cursor: pointer; display: none;
-    box-shadow: 0 4px 24px rgba(124,109,255,0.3);
-    transition: all 0.2s;
-    margin-top: 8px;
-  }
-  .btn-save.visible { display: block; }
-  .btn-save:active { transform: scale(0.98); }
+  .big-stars { display: flex; gap: 4px; margin: 14px 0 10px; }
+  .big-star { width: 22px; height: 22px; border-radius: 3px; transition: background 0.2s; }
+  .big-star.filled { background: #f5a623; }
+  .big-star.empty { background: #e0e0e0; }
 
-  /* Saved loops */
-  .section-header {
-    font-size: 11px; font-weight: 700; color: var(--text3);
-    letter-spacing: 1.2px; text-transform: uppercase;
-    margin: 20px 0 10px;
+  .classification-label {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
   }
-  .saved-loop-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+  .sim-status-green { color: var(--green); }
+  .sim-status-yellow { color: var(--yellow); }
+  .sim-status-red { color: var(--red); }
+  .sim-status-gray { color: var(--muted); }
+
+  /* Problems tab */
+  .problem-section { margin-bottom: 36px; }
+  .section-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
     margin-bottom: 8px;
+    display: block;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 680px;
+    margin-bottom: 20px;
+  }
+
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+  .problem-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+  }
+  .problem-num { font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 8px; letter-spacing: 0.5px; }
+  .problem-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .problem-body { font-size: 12px; color: var(--muted); line-height: 1.65; }
+  .problem-stat {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--blue-light);
+    margin: 14px -20px -20px;
+    padding: 10px 20px;
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid var(--blue-mid);
+    color: var(--blue);
+  }
+
+  .priority-table { width: 100%; border-collapse: collapse; }
+  .priority-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 10px 16px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-table td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .priority-table tr:last-child td { border-bottom: none; }
+  .p-rank { font-weight: 700; font-size: 16px; color: var(--text); }
+  .p-rank.s1 { color: var(--blue); }
+  .p-rank.s2 { color: var(--text); }
+  .p-rank.s3 { color: var(--muted); }
+  .p-rank.s4 { color: var(--muted-light); }
+
+  .effort-bar { display: flex; gap: 3px; margin-top: 5px; }
+  .effort-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .effort-dot.filled { background: var(--orange); }
+  .effort-dot.empty { background: #e0e0e0; }
+
+  .impact-bar { display: flex; gap: 3px; margin-top: 5px; }
+  .impact-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .impact-dot.filled { background: var(--blue); }
+  .impact-dot.empty { background: #e0e0e0; }
+
+  .cta-banner {
+    background: var(--blue);
+    border-radius: 6px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+  .cta-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .cta-text p { font-size: 13px; color: rgba(255,255,255,0.75); }
+  .cta-btn {
+    background: #fff;
+    color: var(--blue);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
-  }
-  .saved-loop-item:hover { border-color: var(--border2); background: var(--surface2); }
-  .saved-loop-item:active { transform: scale(0.99); }
-  .loop-thumb {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: var(--accent-soft);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
-  }
-  .loop-info { flex: 1; min-width: 0; }
-  .loop-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .loop-meta { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 2px; }
-  .btn-delete-loop {
-    background: var(--surface3); border: none; cursor: pointer;
-    color: var(--text3); width: 28px; height: 28px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all 0.15s; font-size: 12px;
-  }
-  .btn-delete-loop:hover { background: rgba(255,94,125,0.15); color: var(--red); }
-
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: rgba(20,20,32,0.95); backdrop-filter: blur(20px);
-    color: var(--text); padding: 10px 20px; border-radius: 30px;
-    font-size: 13px; font-weight: 600;
-    border: 1px solid var(--border2);
-    opacity: 0; transition: all 0.3s ease;
-    white-space: nowrap; pointer-events: none; z-index: 100;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* Paywall modal */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px); z-index: 200;
-    display: none; align-items: flex-end; justify-content: center;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: 24px 24px 0 0;
-    padding: 32px 24px 48px; width: 100%; max-width: 480px;
-    border-top: 1px solid var(--border2);
-    animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-  .modal-handle {
-    width: 36px; height: 4px; background: var(--border2);
-    border-radius: 2px; margin: 0 auto 24px;
-  }
-  .modal-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
-  .modal-sub { font-size: 14px; color: var(--text2); text-align: center; margin-bottom: 24px; }
-  .modal-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
-  .modal-dot {
-    width: 12px; height: 12px; border-radius: 50%; background: var(--red);
-  }
-  .modal-dot.remaining { background: var(--green); }
-  .modal-features { margin-bottom: 24px; }
-  .modal-feature {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-  }
-  .modal-feature:last-child { border-bottom: none; }
-  .feature-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: var(--accent-soft);
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    white-space: nowrap;
+    transition: opacity 0.15s;
     flex-shrink: 0;
   }
-  .feature-text { font-size: 14px; font-weight: 500; }
-  .feature-sub { font-size: 12px; color: var(--text3); }
-  .modal-price { text-align: center; margin-bottom: 20px; }
-  .price-amount { font-size: 44px; font-weight: 700; line-height: 1; }
-  .price-note { font-size: 13px; color: var(--text3); margin-top: 4px; }
-  .btn-unlock {
-    width: 100%; padding: 16px;
-    background: var(--accent); color: white;
-    border: none; border-radius: 14px;
-    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
-    cursor: pointer; margin-bottom: 12px;
-    box-shadow: 0 4px 24px rgba(124,109,255,0.35);
-    transition: all 0.2s;
-  }
-  .btn-unlock:active { transform: scale(0.98); }
-  .btn-dismiss {
-    width: 100%; padding: 12px;
-    background: none; border: none;
-    color: var(--text3); font-family: 'DM Sans', sans-serif;
-    font-size: 14px; cursor: pointer;
-  }
+  .cta-btn:hover { opacity: 0.9; }
 
-  /* Hidden player */
-  #audio { display: none; }
-
-  /* Empty state */
-  .empty-state {
-    text-align: center; padding: 32px 0; color: var(--text3);
+  @media (max-width: 900px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .main-grid { grid-template-columns: 1fr; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .sim-layout { grid-template-columns: 1fr; }
   }
-  .empty-state .icon { font-size: 36px; margin-bottom: 8px; }
-  .empty-state p { font-size: 14px; }
 </style>
 </head>
 <body>
 
-<div class="blob-container">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-wordmark">bol</span>
+      <div class="logo-divider"></div>
+      <span class="logo-section">Partner Intelligence</span>
+    </div>
+    <div class="header-meta">Price classification · NL/BE</div>
+  </div>
+</header>
+
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Partner Intelligence</div>
+    <h1>Price rating overview</h1>
+    <p>Monitor how bol rates your offers relative to the market, understand which listings have lost visibility, and model the impact of adjustments before applying them.</p>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('dashboard')">Offer overview</button>
+      <button class="tab" onclick="showTab('simulator')">Price simulator</button>
+      <button class="tab" onclick="showTab('problems')">Analysis</button>
+    </div>
+  </div>
 </div>
 
-<div class="app">
-  <div class="header">
-    <div class="logo">loop<span>.</span></div>
-    <div class="free-badge" id="freeBadge">5 free loops</div>
-  </div>
+<div class="container">
+  <div class="page-content">
 
-  <!-- Upload -->
-  <div class="upload-zone" id="uploadZone">
-    <input type="file" id="fileInput" accept="audio/*">
-    <span class="upload-icon">🎵</span>
-    <div class="upload-title">Drop a track to practice</div>
-    <div class="upload-sub">or tap to browse your files</div>
-    <div class="upload-formats">MP3 · M4A · WAV · AAC · OGG</div>
-  </div>
+  <!-- DASHBOARD TAB -->
+  <div id="tab-dashboard" class="panel active">
 
-  <!-- Player (hidden until track loaded) -->
-  <div id="playerSection" style="display:none">
+    <div class="stats-row">
+      <div class="stat-card green">
+        <div class="stat-label">Optimally priced</div>
+        <div class="stat-value">2,841</div>
+        <div class="stat-sub">Koopblok eligible · +14% vs prior period</div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-label">Within range</div>
+        <div class="stat-value">5,103</div>
+        <div class="stat-sub">3–4 stars · adjustment may improve position</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-label">Below threshold</div>
+        <div class="stat-value">1,872</div>
+        <div class="stat-sub">1–2 stars · excluded from advertising</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">Not shown</div>
+        <div class="stat-value">304</div>
+        <div class="stat-sub">Price deviation &gt;40% · removed from listings</div>
+      </div>
+    </div>
 
-    <!-- Track info -->
-    <div class="card">
-      <div class="card-inner">
-        <div class="track-info">
-          <div class="track-thumb" id="trackThumb">🎵</div>
-          <div class="track-meta">
-            <div class="track-title" id="trackTitle">No track loaded</div>
-            <div class="track-sub" id="trackSub">Upload a file to start</div>
-            <div class="loop-pill" id="loopPill" style="display:none">↺ LOOPING</div>
+    <div class="main-grid">
+      <!-- Product Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Offer pricing overview</div>
+            <div class="card-subtitle">Refreshed every 15 min · Ranked by revenue at risk</div>
+          </div>
+          <button class="action-btn" onclick="renderTable()">↻ Refresh</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Rating</th>
+              <th>Listed price</th>
+              <th>Market reference</th>
+              <th>Deviation</th>
+              <th>Classification</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="product-table"></tbody>
+        </table>
+      </div>
+
+      <!-- Legend -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Rating methodology</div>
+            <div class="card-subtitle">How bol assigns price ratings to offers</div>
+          </div>
+        </div>
+        <div class="legend-card">
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div>
+            </div>
+            <div class="legend-text">
+              <h4>Market minimum</h4>
+              <p>Lowest listed price across benchmarks<br>Koopblok priority · advertising eligible</p>
+            </div>
+            <span class="legend-impact badge-green badge">5 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>Within 5% of market minimum</h4>
+              <p>Strong koopblok candidacy<br>Full advertising eligibility</p>
+            </div>
+            <span class="legend-impact badge-green badge">4 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star empty"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>5–15% above market minimum</h4>
+              <p>Reduced koopblok candidacy<br>Ad visible, lower click-through rate</p>
+            </div>
+            <span class="legend-impact badge-yellow badge">3 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star empty"></div><div class="legend-star empty"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>15–30% above market minimum</h4>
+              <p>Unlikely to win koopblok<br>Ad placement limited</p>
+            </div>
+            <span class="legend-impact badge-orange badge">2 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star empty"></div><div class="legend-star empty"></div><div class="legend-star empty"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>More than 30% above market minimum</h4>
+              <p>No koopblok eligibility<br>Excluded from advertising</p>
+            </div>
+            <span class="legend-impact badge-red badge">1 star</span>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Waveform -->
-      <div class="waveform-wrap">
-        <canvas id="waveform"></canvas>
-        <div class="time-row">
-          <span class="time-mono" id="currentTime">0:00</span>
-          <div class="loop-range-badge" id="loopRangeBadge">
-            <span class="a">A</span>
-            <span class="t" id="loopA">—</span>
-            <span class="b">B</span>
-            <span class="t" id="loopB">—</span>
+    <!-- Opportunities -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Recommended pricing actions</div>
+          <div class="card-subtitle">Offers where an adjustment would improve rating and restore position</div>
+        </div>
+        <span class="badge badge-green">€4,280 estimated weekly impact</span>
+      </div>
+      <div class="opp-list">
+        <div style="display:flex;justify-content:space-between;padding:8px 16px;background:#fafafa;border-bottom:1px solid var(--border);">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;">Offer · Suggested action</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;">Est. weekly revenue recovered</div>
+        </div>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>LEGO Technic 42143</h4>
+            <p>2 stars · Adjust −€2.10 to reach 4 stars · +38% click-through estimated</p>
           </div>
-          <span class="time-mono" id="totalTime">0:00</span>
+          <div class="opp-right">
+            <div class="opp-gain">€640/wk</div>
+            <div class="opp-type">PRICE ADJUSTMENT</div>
+          </div>
         </div>
-      </div>
-
-      <!-- Transport -->
-      <div class="transport">
-        <button class="btn-icon" onclick="skip(-10)" title="Back 10s">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
-            <text x="8" y="15" font-size="5" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="bold">10</text>
-          </svg>
-        </button>
-        <button class="btn-icon" onclick="seekTo(0)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="3" height="16"/><polygon points="8,4 22,12 8,20"/></svg>
-        </button>
-        <button class="btn-play" id="playBtn" onclick="togglePlay()">
-          <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
-          <svg id="pauseIcon" width="28" height="28" viewBox="0 0 24 24" fill="white" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        </button>
-        <button class="btn-icon" onclick="skip(10)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-.49-3.51"/>
-            <text x="8" y="15" font-size="5" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="bold">10</text>
-          </svg>
-        </button>
-        <button class="btn-icon" onclick="triggerUpload()" title="Load new track">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Loop controls -->
-    <div class="card">
-      <div class="card-inner">
-        <div class="loop-grid">
-          <button class="btn-loop btn-a" id="btnA" onclick="setA()">
-            <span class="badge">A</span> Set Start
-          </button>
-          <button class="btn-loop btn-b" id="btnB" onclick="setB()">
-            Set End <span class="badge">B</span>
-          </button>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Philips Airfryer XL HD9270</h4>
+            <p>3 stars · Adjust −€4.50 to reach 5 stars · Koopblok eligibility restored</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€1,120/wk</div>
+            <div class="opp-type">KOOPBLOK</div>
+          </div>
         </div>
-        <button class="btn-loop-toggle" id="loopToggle" onclick="toggleLoop()">
-          ↺ Loop Off
-        </button>
-        <button class="btn-clear" id="btnClear" onclick="clearPoints()">
-          Clear loop points
-        </button>
-      </div>
-    </div>
-
-    <!-- Speed -->
-    <div class="card">
-      <div class="card-inner">
-        <div class="speed-header">
-          <span class="speed-label">Playback Speed</span>
-          <span class="speed-value" id="speedVal">1x</span>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Samsung 65" QLED QE65Q80C</h4>
+            <p>Not shown · Adjust −€89 to reach 2 stars · Listing visibility restored</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€980/wk</div>
+            <div class="opp-type">VISIBILITY</div>
+          </div>
         </div>
-        <div class="speed-row">
-          <span class="speed-limit">0.5x</span>
-          <input type="range" id="speedSlider" min="0.5" max="1.25" step="0.05" value="1"
-            oninput="setSpeed(parseFloat(this.value))">
-          <span class="speed-limit">1.25x</span>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Nespresso Vertuo Next</h4>
+            <p>4 stars · Adjust −€1.20 to reach 5 stars · Review margin impact before adjusting</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€280/wk</div>
+            <div class="opp-type">LOW PRIORITY</div>
+          </div>
         </div>
-        <div class="speed-presets">
-          <button class="btn-preset" onclick="setSpeed(0.5)">0.5x</button>
-          <button class="btn-preset" onclick="setSpeed(0.75)">0.75x</button>
-          <button class="btn-preset active" id="preset1" onclick="setSpeed(1)">1x</button>
-          <button class="btn-preset" onclick="setSpeed(1.25)">1.25x</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Free counter + save -->
-    <div class="free-counter" id="freeCounter">
-      <div class="free-dots" id="freeDots"></div>
-      <div class="free-text" id="freeText">5 free loops remaining</div>
-    </div>
-    <button class="btn-save" id="btnSave" onclick="promptSaveLoop()">
-      💾 Save this loop
-    </button>
-
-    <!-- Saved loops -->
-    <div id="savedSection">
-      <div class="section-header">My Loops</div>
-      <div id="savedList">
-        <div class="empty-state">
-          <div class="icon">↺</div>
-          <p>No saved loops yet</p>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Dyson V15 Detect</h4>
+            <p>1 star · Adjust −€29 to reach 3 stars · Advertising eligibility restored</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€1,260/wk</div>
+            <div class="opp-type">AD ELIGIBILITY</div>
+          </div>
         </div>
       </div>
     </div>
 
   </div>
-</div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+  <!-- SIMULATOR TAB -->
+  <div id="tab-simulator" class="panel">
 
-<!-- Paywall modal -->
-<div class="modal-overlay" id="paywallModal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Unlock Loop Pro</div>
-    <div class="modal-sub">You've used all 5 free loops.</div>
-    <div class="modal-dots" id="modalDots"></div>
-    <div class="modal-features">
-      <div class="modal-feature">
-        <div class="feature-icon">🔖</div>
+    <!-- Product picker -->
+    <div class="card" style="padding:16px 20px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
         <div>
-          <div class="feature-text">Unlimited saved loops</div>
-          <div class="feature-sub">Save and name every loop</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);">Select a product to simulate</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">Pick any product — adjust the price and see your rating change in real time</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span style="font-size:11px;color:var(--muted);margin-right:4px;">Sort by:</span>
+          <button id="sort-revenue" onclick="setSortPicker('revenue')" style="padding:5px 10px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer;font-family:var(--sans);">Revenue</button>
+          <button id="sort-margin" onclick="setSortPicker('margin')" style="padding:5px 10px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:var(--sans);">Gross margin</button>
+          <button id="sort-units" onclick="setSortPicker('units')" style="padding:5px 10px;font-size:11px;font-weight:600;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:var(--sans);">Units sold</button>
         </div>
       </div>
-      <div class="modal-feature">
-        <div class="feature-icon">📁</div>
-        <div>
-          <div class="feature-text">Loop folders</div>
-          <div class="feature-sub">Organise into playlists</div>
+      <div id="product-picker" style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;padding-right:4px;"></div>
+    </div>
+
+    <div class="sim-layout">
+      <div class="card" style="padding: 24px;">
+        <div class="card-header" style="padding: 0 0 14px; margin-bottom: 20px; border-bottom: 1px solid var(--border); background: transparent;">
+          <div>
+            <div class="card-title" id="sim-product-name" style="font-size:15px;">—</div>
+            <div class="card-subtitle" id="sim-product-meta">Select a product above to begin</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Your listed price (€)</label>
+          <input type="number" class="input-field" id="sim-your-price" value="49.99" step="0.01" oninput="runSim()">
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">What you're currently charging for this product on bol</div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Cheapest competitor price (€)</label>
+          <input type="number" class="input-field" id="sim-min-price" value="44.99" step="0.01" oninput="runSim()">
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">The lowest active offer for this product on bol — visible on the product page under "All sellers"</div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Number of active sellers on this listing</label>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fafafa;border:1px solid var(--border);border-radius:6px;">
+            <span style="font-size:15px;font-weight:600;color:var(--text);">8</span>
+            <span style="font-size:11px;color:var(--muted);">Fetched from bol · Updates when you search for a product</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">More competing sellers makes the buy box harder to win, even at the right price.</div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Your seller rating</label>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fafafa;border:1px solid var(--border);border-radius:6px;">
+            <span style="font-size:15px;font-weight:600;color:var(--text);">8.4 / 10</span>
+            <span style="font-size:11px;color:var(--muted);">From your Partner Dashboard · Performance tab</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Bol weighs your rating alongside price when deciding who wins the buy box.</div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Delivery time</label>
+          <select class="input-field" id="sim-delivery" onchange="runSim()">
+            <option value="1">Same day / next day</option>
+            <option value="2" selected>2–3 business days</option>
+            <option value="3">4–7 business days</option>
+            <option value="5">8–14 business days</option>
+          </select>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Faster delivery improves buy box probability. Bol favours same-day and next-day offers when price is close.</div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Your cost price (€)</label>
+          <input type="number" class="input-field" id="sim-cost" value="32.00" step="0.01" oninput="runSim()">
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">What you paid for the product (excl. bol fees). Used only to calculate your gross margin — not shared with bol.</div>
         </div>
       </div>
-      <div class="modal-feature">
-        <div class="feature-icon">🔗</div>
-        <div>
-          <div class="feature-text">Join loops</div>
-          <div class="feature-sub">Chain loops together</div>
+
+      <div>
+        <div class="sim-output" style="margin-bottom: 16px;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px;">Price rating</div>
+          <div class="big-stars" id="sim-stars-display"></div>
+          <div class="classification-label" id="sim-class-label">—</div>
+          <div style="font-size: 12px; color: var(--muted);" id="sim-class-reason">Select a product to begin</div>
+
+          <!-- Not shown warning banner — hidden by default -->
+          <div id="sim-not-shown-banner" style="display:none;margin-top:14px;padding:12px 14px;background:#ffe8e8;border:1px solid #ffcccc;border-radius:6px;border-left:4px solid var(--red);">
+            <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">⚠ This product is not visible to buyers</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.6;">Your price is more than 30% above the cheapest competitor. Bol has removed this listing from search results — no buyer can find it until you lower the price. This is the most urgent state to fix.</div>
+          </div>
+
+          <div style="height: 1px; background: var(--border); margin: 20px 0;"></div>
+
+          <div class="sim-result-row">
+            <span class="sim-result-label">Deviation from market reference</span>
+            <span class="sim-result-value" id="sim-premium">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Gross margin at listed price</span>
+            <span class="sim-result-value" id="sim-margin">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Koopblok candidacy</span>
+            <span class="sim-result-value" id="sim-buyblock">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Advertising eligibility</span>
+            <span class="sim-result-value" id="sim-advis">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Reference price for improvement</span>
+            <span class="sim-result-value" id="sim-rec">—</span>
+          </div>
         </div>
-      </div>
-      <div class="modal-feature">
-        <div class="feature-icon">⚡</div>
-        <div>
-          <div class="feature-text">Speed control</div>
-          <div class="feature-sub">0.5x to 1.25x playback</div>
+
+        <div class="card" style="padding: 20px; background: #fafafa;">
+          <div class="card-title" style="margin-bottom: 12px; font-size: 13px;">Price adjustments to improve rating</div>
+          <div id="sim-upgrade-path" style="font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--muted);"></div>
         </div>
       </div>
     </div>
-    <div class="modal-price">
-      <div class="price-amount" id="priceDisplay">₹49</div>
-      <div class="price-note">one-time · no subscription ever</div>
-    </div>
-    <button class="btn-unlock" onclick="handlePurchase()">Unlock Loop Pro</button>
-    <button class="btn-dismiss" onclick="closePaywall()">Maybe later</button>
   </div>
-</div>
 
-<audio id="audio"></audio>
+  <!-- PROBLEM SPACE TAB -->
+  <div id="tab-problems" class="panel">
+
+    <!-- PROBLEMS -->
+    <div class="problem-section">
+      <span class="section-tag">What's broken</span>
+      <div class="section-title">Six gaps in how bol's price rating works today</div>
+      <div class="section-desc">The 1–5 star rating controls which partners get the buy box, who can advertise, and who shows up in search. Partners have almost no visibility into how it works or when it changes.</div>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-num">01</div>
+          <div class="problem-title">No way to predict your rating</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>The thresholds for each star tier aren't published</li>
+            <li>You can't model what happens before changing a price</li>
+            <li>A competitor dropping their price can silently downgrade you</li>
+          </ul>
+          <div class="problem-stat">Most partners don't know what drives their rating · To confirm via survey</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">02</div>
+          <div class="problem-title">You find out too late</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>Rating drops show up as declining sales, not alerts</li>
+            <li>Buy box and ad spend are already lost by the time you notice</li>
+            <li>The portal only shows your current rating — no history</li>
+          </ul>
+          <div class="problem-stat">Estimated days-long gap between a drop and a response · To measure via platform logs</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">03</div>
+          <div class="problem-title">Same rules for every category</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>A €10 gap matters very differently on a €15 book vs. a €500 TV</li>
+            <li>Electronics buyers compare prices carefully; book buyers mostly don't</li>
+            <li>Identical bands produce unfair outcomes across categories</li>
+          </ul>
+          <div class="problem-stat">Price sensitivity varies significantly by category · Source: ScienceDirect 2024</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">04</div>
+          <div class="problem-title">Rating ignores your margin</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>The system rewards the lowest price, regardless of profitability</li>
+            <li>Partners sometimes lower prices below cost to gain a star</li>
+            <li>There's no warning before you make that mistake</li>
+          </ul>
+          <div class="problem-stat">A meaningful share of rating-driven adjustments reduce net margin · To quantify with cost data</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">05</div>
+          <div class="problem-title">Automated pricing creates instability</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>40%+ of top listings have multiple automated re-pricers active</li>
+            <li>Two algorithms competing can inflate prices or crash them</li>
+            <li>Neither outcome is good — and nothing flags it today</li>
+          </ul>
+          <div class="problem-stat">Validated · Source: ScienceDirect 2024 (bol.com dataset)</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">06</div>
+          <div class="problem-title">Partners pay third parties to fill the gap</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>The portal has no simulation, history, or prediction tools</li>
+            <li>Partners use Channable, Omnia, PriceTweakers instead</li>
+            <li>€3M+ a year leaving the bol ecosystem for tools bol should own</li>
+          </ul>
+          <div class="problem-stat">Estimated from tool pricing × active partner base</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOL'S PERSPECTIVE -->
+    <div class="problem-section">
+      <span class="section-tag">The other side</span>
+      <div class="section-title">Why bol hasn't just made this transparent</div>
+      <div class="section-desc">There are real reasons the system works the way it does. Fixing it isn't just a question of building tools — it involves tradeoffs bol has to consciously make.</div>
+
+      <div class="card" style="overflow: hidden; margin-bottom: 20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);">
+          <div style="padding:20px;border-right:1px solid var(--border);">
+            <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;">Arguments for more transparency</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.8;padding-left:16px;margin:0;list-style:disc;">
+              <li>Partners who understand the system price more competitively</li>
+              <li>Fewer errors means fewer support tickets and disputes</li>
+              <li>Bringing tools in-house keeps that spend on-platform</li>
+              <li>Healthy partner economics = longer-term platform commitment</li>
+            </ul>
+          </div>
+          <div style="padding:20px;">
+            <div style="font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;">Arguments for keeping it opaque</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.8;padding-left:16px;margin:0;list-style:disc;">
+              <li>Exact thresholds get gamed — partners price to the line, not below it</li>
+              <li>Ambiguity gives bol flexibility to adjust the system without backlash</li>
+              <li>Margin floors could reduce price pressure that benefits consumers</li>
+              <li>Category-level calibration is expensive to build and maintain</li>
+            </ul>
+          </div>
+        </div>
+        <div style="padding:14px 20px;background:var(--blue-light);border-top:1px solid var(--blue-mid);font-size:13px;color:var(--text);line-height:1.6;">
+          <strong>The middle ground:</strong> Show partners where they stand and what to change — without publishing the exact formula. Partners get clarity; bol keeps control.
+        </div>
+      </div>
+    </div>
+
+    <!-- ROADMAP -->
+    <div class="problem-section">
+      <span class="section-tag">What to build</span>
+      <div class="section-title">Five initiatives, prioritised by RICE</div>
+      <div class="section-desc">RICE scores each initiative on Reach (how many partners it affects), Impact (how much it changes their outcome), Confidence (how sure we are), and Effort (how long to build). Higher score = do it first.</div>
+
+      <div class="card" style="overflow:hidden;margin-bottom:20px;">
+        <table class="priority-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Initiative</th>
+              <th>Solves</th>
+              <th>What it does</th>
+              <th>Reach</th>
+              <th>Impact</th>
+              <th>Confidence</th>
+              <th>Effort</th>
+              <th>RICE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="p-rank s1">1</span></td>
+              <td style="font-weight:700">Price simulator</td>
+              <td style="font-size:11px;color:var(--blue);font-weight:600">01 · 06</td>
+              <td style="font-size:12px;color:var(--muted);max-width:200px">Model your rating at any price before changing it. Shows margin impact and what to adjust to reach the next tier.</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">51K</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">3</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">80%</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">2 wks</td>
+              <td><span class="badge badge-blue" style="font-size:13px;font-weight:700">6,120</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s2">2</span></td>
+              <td style="font-weight:700">Rating alerts</td>
+              <td style="font-size:11px;color:var(--blue);font-weight:600">02</td>
+              <td style="font-size:12px;color:var(--muted);max-width:200px">Notify partners the moment a rating drops, with a suggested price adjustment and estimated revenue at risk.</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">51K</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">3</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">70%</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">6 wks</td>
+              <td><span class="badge badge-blue" style="font-size:13px;font-weight:700">1,785</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s3">3</span></td>
+              <td style="font-weight:700">Margin floor</td>
+              <td style="font-size:11px;color:var(--blue);font-weight:600">04</td>
+              <td style="font-size:12px;color:var(--muted);max-width:200px">Partners set a cost price. The system flags any suggested adjustment that would push them below it before they act.</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">15K</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">2</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">60%</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">6 wks</td>
+              <td><span class="badge badge-gray" style="font-size:13px;font-weight:700">300</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s4">4</span></td>
+              <td style="font-weight:700">Category thresholds</td>
+              <td style="font-size:11px;color:var(--blue);font-weight:600">03</td>
+              <td style="font-size:12px;color:var(--muted);max-width:200px">Recalibrate star bands per category based on actual buyer price sensitivity — tighter for electronics, looser for books.</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">51K</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">3</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">40%</td>
+              <td style="font-size:12px;text-align:center;font-weight:600">20 wks</td>
+              <td><span class="badge badge-gray" style="font-size:13px;font-weight:700">306</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:12px 20px;background:#fafafa;border-top:1px solid var(--border);font-size:12px;color:var(--muted);">
+          <strong style="color:var(--text);">RICE formula:</strong> (Reach × Impact × Confidence) ÷ Effort in weeks. Reach = estimated partners affected. Impact scored 1–3. Confidence = how certain we are the problem and solution are right. Effort in weeks of engineering time.
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS METRICS -->
+    <div class="problem-section">
+      <span class="section-tag">How we measure success</span>
+      <div class="section-title">What good looks like for each initiative</div>
+
+      <div class="card" style="overflow:hidden;margin-bottom:20px;">
+        <table class="priority-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Initiative</th>
+              <th>What we measure</th>
+              <th>What we watch out for</th>
+              <th>Target</th>
+              <th>Validate by</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="p-rank s1">1</span></td>
+              <td style="font-weight:700">Price simulator</td>
+              <td style="font-size:12px;color:var(--text)">Partners using the simulator before changing a price</td>
+              <td style="font-size:12px;color:var(--muted)">Support tickets about rating confusion shouldn't increase</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">1 in 4 active partners within 90 days</td>
+              <td style="font-size:12px"><span class="badge badge-green">Now + 90d</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s2">2</span></td>
+              <td style="font-weight:700">Rating alerts</td>
+              <td style="font-size:12px;color:var(--text)">Time between a rating drop and a price correction</td>
+              <td style="font-size:12px;color:var(--muted)">Alert opt-out rate; no spike in erratic pricing</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">Response within hours, not days</td>
+              <td style="font-size:12px"><span class="badge badge-green">Q1 + 60d</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s3">3</span></td>
+              <td style="font-weight:700">Margin floor</td>
+              <td style="font-size:12px;color:var(--text)">How many partners set a floor; how many heed the warning</td>
+              <td style="font-size:12px;color:var(--muted)">Platform pricing competitiveness shouldn't drop</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">30%+ set a floor; majority act on warnings</td>
+              <td style="font-size:12px"><span class="badge badge-yellow">Q2 + 90d</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s4">4</span></td>
+              <td style="font-weight:700">Category thresholds</td>
+              <td style="font-size:12px;color:var(--text)">Conversion rate and partner revenue in recalibrated categories</td>
+              <td style="font-size:12px;color:var(--muted)">Consumer-facing price competitiveness must hold</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">Partner GMV up; no consumer satisfaction drop</td>
+              <td style="font-size:12px"><span class="badge badge-orange">Q3 + 12wk</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cta-banner">
+        <div class="cta-text">
+          <h3>Initiative 1 is live in the simulator tab</h3>
+          <p>Click any "Simulate" button in Offer overview to pre-load a product's prices</p>
+        </div>
+        <button class="cta-btn" onclick="showTab('simulator')">View simulator</button>
+      </div>
+    </div>
+
+    <!-- CATEGORY THRESHOLDS DEEP DIVE -->
+    <div class="problem-section">
+      <span class="section-tag">Biggest structural change</span>
+      <div class="section-title">Pricing bands should differ by category</div>
+      <div class="section-desc">Today every category uses the same deviation bands. These are indicative proposals — the right numbers come from bol's own conversion data, not assumptions.</div>
+
+      <div class="card" style="overflow:hidden;margin-bottom:20px;">
+        <div class="card-header">
+          <div class="card-title">Proposed threshold changes</div>
+          <div class="card-subtitle">The "Why" column draws on published retail behaviour research and category intuition — not bol's internal data. Actual thresholds need bol's conversion data to confirm.</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>How price-sensitive are buyers?</th>
+              <th>Current 4★ threshold</th>
+              <th>Proposed threshold</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:600">Consumer electronics</td>
+              <td><span class="badge badge-red">Very</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤3%</td>
+              <td style="color:var(--muted);font-size:12px">5% on a €500 TV is €25 — buyers notice and compare</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Toys &amp; games</td>
+              <td><span class="badge badge-yellow">Moderate</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤7%</td>
+              <td style="color:var(--muted);font-size:12px">Brand and availability matter more than a €1–2 difference</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Books &amp; media</td>
+              <td><span class="badge badge-green">Low</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤12%</td>
+              <td style="color:var(--muted);font-size:12px">Fixed cover prices and low absolute values; buyers rarely compare</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Personal care</td>
+              <td><span class="badge badge-yellow">Moderate</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤6%</td>
+              <td style="color:var(--muted);font-size:12px">Brand loyalty is high; repeat buyers are less price-driven</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Fashion &amp; footwear</td>
+              <td><span class="badge badge-yellow">Moderate</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤8%</td>
+              <td style="color:var(--muted);font-size:12px">Size availability and style win over small price gaps</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:12px 20px;background:#fafafa;border-top:1px solid var(--border);font-size:12px;color:var(--muted);line-height:1.6;">
+          <strong style="color:var(--text);">Source basis:</strong> Price sensitivity direction informed by ScienceDirect 2024 (bol.com dataset) and established retail consumer behaviour research. Specific thresholds are illustrative — calibration requires measuring where click-through rate drops materially vs. the buy box winner, by category, using bol's internal data.
+        </div>
+      </div>
+    </div>
+
+    <!-- EVIDENCE — optional reading at the very bottom -->
+    <div style="border-top: 2px solid var(--border); margin: 40px 0 24px; padding-top: 24px;">
+      <span class="section-tag">Sources (optional reading)</span>
+      <div class="section-title" style="font-size:16px;">What's confirmed vs. what needs checking</div>
+
+      <div class="card" style="overflow: hidden; margin-bottom: 32px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Claim</th>
+              <th>Finding</th>
+              <th>Source</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Buy box concentration</td>
+              <td>97% of purchases go to the buy box winner</td>
+              <td>ChannelEngine / bol</td>
+              <td><span class="badge badge-green">Confirmed</span></td>
+            </tr>
+            <tr>
+              <td>Automated re-pricing prevalence</td>
+              <td>40%+ of top listings have multiple automated pricers</td>
+              <td>ScienceDirect 2024</td>
+              <td><span class="badge badge-green">Confirmed</span></td>
+            </tr>
+            <tr>
+              <td>Algorithm-driven price inflation</td>
+              <td>Two competing algorithms push prices up, not down</td>
+              <td>bol.com dataset, 2020</td>
+              <td><span class="badge badge-green">Confirmed</span></td>
+            </tr>
+            <tr>
+              <td>1-star ad exclusion</td>
+              <td>1-star offers cannot run marketplace ads</td>
+              <td>bol partner documentation</td>
+              <td><span class="badge badge-green">Confirmed</span></td>
+            </tr>
+            <tr>
+              <td>Search click distribution</td>
+              <td>78% of clicks go to page 1; 60% to the top 10</td>
+              <td>ChannelEngine 2025</td>
+              <td><span class="badge badge-green">Confirmed</span></td>
+            </tr>
+            <tr>
+              <td>Partner confusion about ratings</td>
+              <td>Most partners are uncertain what drives their rating</td>
+              <td>To confirm via partner survey or support ticket analysis</td>
+              <td><span class="badge badge-yellow">Assumed</span></td>
+            </tr>
+            <tr>
+              <td>Detection lag</td>
+              <td>Partners take days to respond to a rating drop</td>
+              <td>To measure via platform event logs</td>
+              <td><span class="badge badge-yellow">Assumed</span></td>
+            </tr>
+            <tr>
+              <td>Margin-eroding adjustments</td>
+              <td>Some rating-driven price changes reduce profit</td>
+              <td>To quantify once partner cost data is available</td>
+              <td><span class="badge badge-orange">To validate</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  </div><!-- /page-content -->
+</div><!-- /container -->
 
 <script>
-// ── State ──────────────────────────────────────────────
-const audio = document.getElementById('audio');
-let state = {
-  loaded: false,
-  playing: false,
-  pointA: null,
-  pointB: null,
-  looping: false,
-  speed: 1.0,
-  duration: 0,
-  waveformData: [],
-  loopsUsed: parseInt(localStorage.getItem('loops_used') || '0'),
-  isPro: localStorage.getItem('is_pro') === 'true',
-  savedLoops: JSON.parse(localStorage.getItem('saved_loops') || '[]'),
-  currentFile: null,
-};
-
-const FREE_LIMIT = 5;
-
-// ── Init ───────────────────────────────────────────────
-function init() {
-  renderFreeDots();
-  renderSavedLoops();
-  updatePriceForRegion();
-
-  // File input
-  document.getElementById('fileInput').addEventListener('change', e => {
-    if (e.target.files[0]) loadFile(e.target.files[0]);
-  });
-
-  // Drag and drop
-  const zone = document.getElementById('uploadZone');
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.classList.remove('drag-over');
-    if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
-  });
-
-  // Waveform click
-  document.getElementById('waveform').addEventListener('click', onWaveformClick);
-  document.getElementById('waveform').addEventListener('touchstart', onWaveformTouch, {passive: true});
-
-  // Audio events
-  audio.addEventListener('timeupdate', onTimeUpdate);
-  audio.addEventListener('loadedmetadata', onLoaded);
-  audio.addEventListener('ended', onEnded);
-}
-
-function updatePriceForRegion() {
-  const lang = navigator.language || '';
-  const isIndia = lang.includes('en-IN') || Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Calcutta' || Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Kolkata';
-  document.getElementById('priceDisplay').textContent = isIndia ? '₹49' : '$1.49';
-}
-
-// ── File Loading ───────────────────────────────────────
-function loadFile(file) {
-  const url = URL.createObjectURL(file);
-  audio.src = url;
-  audio.load();
-  state.currentFile = file;
-  state.pointA = null;
-  state.pointB = null;
-  state.looping = false;
-  state.playing = false;
-
-  const name = file.name.replace(/\.[^/.]+$/, '');
-  document.getElementById('trackTitle').textContent = name;
-  document.getElementById('trackSub').textContent = formatBytes(file.size) + ' · ' + file.type.split('/')[1]?.toUpperCase();
-  document.getElementById('uploadZone').style.display = 'none';
-  document.getElementById('playerSection').style.display = 'block';
-
-  updateUI();
-  toast('🎵 ' + name + ' loaded');
-}
-
-function triggerUpload() {
-  document.getElementById('fileInput').click();
-}
-
-function formatBytes(b) {
-  return b > 1e6 ? (b/1e6).toFixed(1) + ' MB' : (b/1e3).toFixed(0) + ' KB';
-}
-
-// ── Audio Events ───────────────────────────────────────
-function onLoaded() {
-  state.duration = audio.duration;
-  state.loaded = true;
-  document.getElementById('totalTime').textContent = formatTime(state.duration);
-  generateWaveform();
-}
-
-function onTimeUpdate() {
-  const t = audio.currentTime;
-  document.getElementById('currentTime').textContent = formatTime(t);
-  drawWaveform(t / state.duration);
-
-  // Loop enforcement
-  if (state.looping && state.pointA !== null && state.pointB !== null) {
-    if (t >= state.pointB) {
-      audio.currentTime = state.pointA;
-      if (state.playing) audio.play();
-    }
-  }
-}
-
-function onEnded() {
-  state.playing = false;
-  updatePlayButton();
-  if (state.looping && state.pointA !== null) {
-    audio.currentTime = state.pointA;
-    audio.play();
-    state.playing = true;
-    updatePlayButton();
-  }
-}
-
-// ── Transport ──────────────────────────────────────────
-function togglePlay() {
-  if (!state.loaded) { toast('Upload a track first'); return; }
-  if (state.playing) {
-    audio.pause();
-    state.playing = false;
-  } else {
-    audio.playbackRate = state.speed;
-    audio.play();
-    state.playing = true;
-  }
-  updatePlayButton();
-}
-
-function skip(secs) {
-  audio.currentTime = Math.max(0, Math.min(state.duration, audio.currentTime + secs));
-}
-
-function seekTo(t) {
-  audio.currentTime = t;
-}
-
-function updatePlayButton() {
-  document.getElementById('playIcon').style.display = state.playing ? 'none' : 'block';
-  document.getElementById('pauseIcon').style.display = state.playing ? 'block' : 'none';
-  document.getElementById('trackThumb').classList.toggle('playing', state.playing);
-}
-
-// ── Loop Controls ──────────────────────────────────────
-function setA() {
-  if (!state.loaded) { toast('Upload a track first'); return; }
-  state.pointA = audio.currentTime;
-  if (state.pointB !== null && state.pointB <= state.pointA) {
-    state.pointB = null;
-    state.looping = false;
-  }
-  document.getElementById('btnA').classList.add('active');
-  document.getElementById('btnClear').classList.add('visible');
-  updateLoopBadge();
-  updateSaveButton();
-  toast('A set at ' + formatTime(state.pointA));
-  vibrate();
-}
-
-function setB() {
-  if (!state.loaded) { toast('Upload a track first'); return; }
-  if (state.pointA === null) { toast('Set A first'); return; }
-  if (audio.currentTime <= state.pointA) { toast('B must be after A'); return; }
-  state.pointB = audio.currentTime;
-  document.getElementById('btnB').classList.add('active');
-
-  // Auto-enable loop
-  state.looping = true;
-  updateLoopToggle();
-  updateLoopBadge();
-  updateSaveButton();
-  toast('B set — loop enabled ↺');
-  vibrate();
-}
-
-function toggleLoop() {
-  if (!state.loaded) return;
-  if (state.pointA === null || state.pointB === null) {
-    toast('Set A and B points first');
-    return;
-  }
-  state.looping = !state.looping;
-  updateLoopToggle();
-  toast(state.looping ? '↺ Looping' : 'Loop paused');
-}
-
-function updateLoopToggle() {
-  const btn = document.getElementById('loopToggle');
-  const pill = document.getElementById('loopPill');
-  if (state.looping) {
-    btn.classList.add('active');
-    btn.textContent = '↺ Looping — tap to pause';
-    pill.style.display = 'inline-flex';
-  } else if (state.pointA !== null && state.pointB !== null) {
-    btn.classList.remove('active');
-    btn.textContent = '↺ Loop ready — tap to start';
-    pill.style.display = 'none';
-  } else {
-    btn.classList.remove('active');
-    btn.textContent = '↺ Loop Off';
-    pill.style.display = 'none';
-  }
-}
-
-function clearPoints() {
-  state.pointA = null;
-  state.pointB = null;
-  state.looping = false;
-  document.getElementById('btnA').classList.remove('active');
-  document.getElementById('btnB').classList.remove('active');
-  document.getElementById('btnClear').classList.remove('visible');
-  document.getElementById('loopRangeBadge').classList.remove('visible');
-  document.getElementById('loopPill').style.display = 'none';
-  updateLoopToggle();
-  updateSaveButton();
-  toast('Loop cleared');
-}
-
-function updateLoopBadge() {
-  const badge = document.getElementById('loopRangeBadge');
-  if (state.pointA !== null && state.pointB !== null) {
-    badge.classList.add('visible');
-    document.getElementById('loopA').textContent = formatTime(state.pointA);
-    document.getElementById('loopB').textContent = formatTime(state.pointB);
-  }
-}
-
-// ── Speed ──────────────────────────────────────────────
-function setSpeed(val) {
-  state.speed = val;
-  audio.playbackRate = val;
-  document.getElementById('speedVal').textContent = val + 'x';
-  document.getElementById('speedSlider').value = val;
-  document.querySelectorAll('.btn-preset').forEach(b => {
-    b.classList.toggle('active', parseFloat(b.textContent) === val);
-  });
-}
-
-// ── Save Loop ──────────────────────────────────────────
-function updateSaveButton() {
-  const visible = state.pointA !== null && state.pointB !== null;
-  document.getElementById('btnSave').classList.toggle('visible', visible);
-}
-
-function promptSaveLoop() {
-  if (state.loopsUsed >= FREE_LIMIT && !state.isPro) {
-    openPaywall();
-    return;
-  }
-  const name = prompt('Name this loop:', document.getElementById('trackTitle').textContent);
-  if (name === null) return; // cancelled
-  saveLoop(name || document.getElementById('trackTitle').textContent);
-}
-
-function saveLoop(name) {
-  const loop = {
-    id: Date.now(),
-    name,
-    trackName: document.getElementById('trackTitle').textContent,
-    pointA: state.pointA,
-    pointB: state.pointB,
-    speed: state.speed,
-    duration: state.pointB - state.pointA,
+  // ─── constants ───────────────────────────────────────────────────────────────
+  const C = {
+    green:  '#1a7a1a',
+    yellow: '#8a6800',
+    red:    '#cc0000',
+    muted:  '#767676',
+    blue:   '#0000ff',
   };
-  state.savedLoops.unshift(loop);
-  localStorage.setItem('saved_loops', JSON.stringify(state.savedLoops));
 
-  if (!state.isPro) {
-    state.loopsUsed++;
-    localStorage.setItem('loops_used', state.loopsUsed);
+  // ─── tab switching ────────────────────────────────────────────────────────────
+  function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const tabs = {dashboard:0, simulator:1, problems:2};
+    document.querySelectorAll('.tab')[tabs[id]].classList.add('active');
+    if (id === 'simulator') runSim();
   }
 
-  renderFreeDots();
-  renderSavedLoops();
-  const remaining = Math.max(0, FREE_LIMIT - state.loopsUsed);
-  toast('💾 Saved! ' + (state.isPro ? '' : remaining + ' free remaining'));
-}
+  // ─── product data (fixed, realistic, category-labelled) ──────────────────────
+  const products = [
+    { name: 'Dyson V15 Detect Absolute',          ean: '5025155069882', cat: 'Home',         listed: 619.00, market: 449.00, cost: 380.00, units: 142 },
+    { name: 'Samsung Galaxy Tab S9 FE',           ean: '8806095160368', cat: 'Electronics',  listed: 379.00, market: 299.00, cost: 240.00, units: 98  },
+    { name: 'LEGO Technic 42143 Ferrari Daytona', ean: '5702017117492', cat: 'Toys',         listed: 229.99, market: 199.99, cost: 148.00, units: 87  },
+    { name: 'Oral-B iO Series 7 Elektrische',     ean: '4210201409052', cat: 'Personal care',listed: 189.00, market: 149.00, cost: 92.00,  units: 74  },
+    { name: 'Kindle Paperwhite (16 GB)',           ean: 'B09TMF6475',   cat: 'Electronics',  listed: 159.99, market: 159.99, cost: 98.00,  units: 61  },
+    { name: 'Philips Airfryer XXL HD9630',        ean: '8720389002380', cat: 'Kitchen',      listed: 149.95, market: 139.00, cost: 89.00,  units: 53  },
+    { name: 'Nike Air Max 270 (maat 42)',          ean: '0842778139460', cat: 'Fashion',      listed: 119.95, market: 109.99, cost: 62.00,  units: 38  },
+    { name: 'Nespresso Vertuo Next ENV120',        ean: '7630041682610', cat: 'Kitchen',      listed: 79.99,  market: 77.00,  cost: 44.00,  units: 29  },
+  ];
 
-function deleteLoop(id) {
-  state.savedLoops = state.savedLoops.filter(l => l.id !== id);
-  localStorage.setItem('saved_loops', JSON.stringify(state.savedLoops));
-  renderSavedLoops();
-  toast('Loop deleted');
-}
-
-function loadSavedLoop(loop) {
-  state.pointA = loop.pointA;
-  state.pointB = loop.pointB;
-  state.looping = true;
-  setSpeed(loop.speed);
-  if (state.loaded) {
-    audio.currentTime = loop.pointA;
-  }
-  document.getElementById('btnA').classList.add('active');
-  document.getElementById('btnB').classList.add('active');
-  document.getElementById('btnClear').classList.add('visible');
-  updateLoopToggle();
-  updateLoopBadge();
-  updateSaveButton();
-  toast('↺ Loaded: ' + loop.name);
-}
-
-function renderSavedLoops() {
-  const list = document.getElementById('savedList');
-  if (state.savedLoops.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">↺</div><p>No saved loops yet</p></div>';
-    return;
-  }
-  list.innerHTML = state.savedLoops.map(loop => `
-    <div class="saved-loop-item" onclick="loadSavedLoop(${JSON.stringify(loop).replace(/"/g, '&quot;')})">
-      <div class="loop-thumb">🔁</div>
-      <div class="loop-info">
-        <div class="loop-name">${loop.name}</div>
-        <div class="loop-meta">${formatTime(loop.pointA)} → ${formatTime(loop.pointB)} · ${loop.speed}x · ${formatTime(loop.duration)}</div>
-      </div>
-      <button class="btn-delete-loop" onclick="event.stopPropagation(); deleteLoop(${loop.id})">✕</button>
-    </div>
-  `).join('');
-}
-
-// ── Free dots ──────────────────────────────────────────
-function renderFreeDots() {
-  const dotsEl = document.getElementById('freeDots');
-  const textEl = document.getElementById('freeText');
-  const badge = document.getElementById('freeBadge');
-
-  if (state.isPro) {
-    document.getElementById('freeCounter').style.display = 'none';
-    badge.textContent = 'PRO';
-    badge.style.background = 'rgba(74,219,150,0.15)';
-    badge.style.color = '#4adb96';
-    return;
+  function getStars(listed, market) {
+    const pct = (listed - market) / market * 100;
+    if (pct <= 0)   return 5;
+    if (pct <= 5)   return 4;
+    if (pct <= 15)  return 3;
+    if (pct <= 30)  return 2;
+    return 1;
   }
 
-  dotsEl.innerHTML = '';
-  for (let i = 0; i < FREE_LIMIT; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (i < state.loopsUsed ? ' used' : '');
-    dotsEl.appendChild(dot);
+  function renderStars(n) {
+    return Array.from({length:5}, (_,i) =>
+      `<div class="star ${i < n ? 'filled' : 'empty'}"></div>`
+    ).join('');
   }
 
-  const remaining = Math.max(0, FREE_LIMIT - state.loopsUsed);
-  textEl.innerHTML = `<strong>${remaining}</strong> free loop${remaining !== 1 ? 's' : ''} remaining`;
-  badge.textContent = remaining + ' free';
-
-  // Modal dots too
-  const modalDots = document.getElementById('modalDots');
-  if (modalDots) {
-    modalDots.innerHTML = '';
-    for (let i = 0; i < FREE_LIMIT; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'modal-dot' + (i >= state.loopsUsed ? ' remaining' : '');
-      modalDots.appendChild(dot);
-    }
+  function renderTable() {
+    const tbody = document.getElementById('product-table');
+    tbody.innerHTML = '';
+    products.forEach(p => {
+      const stars  = getStars(p.listed, p.market);
+      const delta  = (p.listed - p.market) / p.market * 100;
+      const status = {5:'badge-green',4:'badge-green',3:'badge-yellow',2:'badge-orange',1:'badge-red'}[stars];
+      const label  = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'}[stars];
+      const dclass = delta > 0 ? 'delta-pos' : 'delta-neg';
+      const dstr   = (delta > 0 ? '+' : '') + delta.toFixed(1) + '%';
+      const margin = ((p.listed - p.cost) / p.listed * 100).toFixed(0);
+      tbody.innerHTML += `
+        <tr style="cursor:pointer;" onclick="loadIntoSim(${products.indexOf(p)})" title="Click to simulate this product">
+          <td>
+            <div class="product-name">${p.name}</div>
+            <div class="product-ean">EAN ${p.ean} · <span style="color:var(--muted-light)">${p.cat}</span></div>
+          </td>
+          <td><div class="stars">${renderStars(stars)}</div></td>
+          <td><div class="price-current">€${p.listed.toFixed(2)}</div><div class="price-market">margin ${margin}%</div></td>
+          <td><div class="price-current">€${p.market.toFixed(2)}</div></td>
+          <td><div class="price-delta ${dclass}">${dstr}</div></td>
+          <td><span class="badge ${status}">${label}</span></td>
+          <td style="color:var(--muted-light);font-size:13px;">→</td>
+        </tr>`;
+    });
   }
-}
 
-// ── Paywall ────────────────────────────────────────────
-function openPaywall() {
-  renderFreeDots();
-  document.getElementById('paywallModal').classList.add('show');
-}
+  let currentSort = 'revenue';
 
-function closePaywall() {
-  document.getElementById('paywallModal').classList.remove('show');
-}
-
-function handlePurchase() {
-  // In production: integrate with Stripe or Apple Pay
-  // For testing, simulate success
-  const confirmed = confirm('This will open payment. For now, tap OK to simulate purchase (test mode).');
-  if (confirmed) {
-    state.isPro = true;
-    localStorage.setItem('is_pro', 'true');
-    renderFreeDots();
-    closePaywall();
-    toast('🎉 Loop Pro unlocked!');
-  }
-}
-
-// ── Waveform ───────────────────────────────────────────
-function generateWaveform() {
-  // Try to decode audio for real waveform
-  if (state.currentFile) {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const buffer = await ctx.decodeAudioData(e.target.result);
-        const data = buffer.getChannelData(0);
-        const samples = 100;
-        const blockSize = Math.floor(data.length / samples);
-        state.waveformData = [];
-        for (let i = 0; i < samples; i++) {
-          let sum = 0;
-          for (let j = 0; j < blockSize; j++) {
-            sum += Math.abs(data[i * blockSize + j]);
-          }
-          state.waveformData.push(sum / blockSize);
-        }
-        // Normalize
-        const max = Math.max(...state.waveformData);
-        state.waveformData = state.waveformData.map(v => v / max);
-        ctx.close();
-        drawWaveform(0);
-      } catch(err) {
-        generateSyntheticWaveform();
+  function setSortPicker(sort) {
+    currentSort = sort;
+    ['revenue','margin','units'].forEach(s => {
+      const btn = document.getElementById('sort-' + s);
+      if (s === sort) {
+        btn.style.background = 'var(--blue)'; btn.style.color = '#fff'; btn.style.borderColor = 'var(--blue)';
+      } else {
+        btn.style.background = '#fff'; btn.style.color = 'var(--muted)'; btn.style.borderColor = 'var(--border)';
       }
+    });
+    renderPicker();
+  }
+
+  function renderPicker() {
+    const picker = document.getElementById('product-picker');
+    if (!picker) return;
+
+    const sorted = [...products].map((p, origIdx) => ({...p, origIdx})).sort((a, b) => {
+      if (currentSort === 'revenue') return (b.listed * b.units) - (a.listed * a.units);
+      if (currentSort === 'margin') return ((b.listed - b.cost) / b.listed) - ((a.listed - a.cost) / a.listed);
+      return b.units - a.units;
+    });
+
+    const sortLabel = {revenue:'Weekly revenue', margin:'Gross margin', units:'Units/wk'};
+
+    picker.innerHTML = '';
+    sorted.forEach((p, rank) => {
+      const stars = getStars(p.listed, p.market);
+      const statusColor = {5:'var(--green)',4:'var(--green)',3:'var(--yellow)',2:'var(--orange)',1:'var(--red)'}[stars];
+      const statusLabel = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'}[stars];
+      const revenueNum = Math.round(p.listed * p.units);
+      const revenue = '€' + revenueNum.toLocaleString('en-US').replace(/,/g, '.') + '/wk';
+      const margin = ((p.listed - p.cost) / p.listed * 100).toFixed(0) + '% margin';
+      const unitsVal = p.units + ' units/wk';
+      const metaVal = currentSort === 'revenue' ? revenue : currentSort === 'margin' ? margin : unitsVal;
+
+      const row = document.createElement('div');
+      row.style.cssText = `display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;gap:12px;transition:border-color 0.15s;`;
+      row.onclick = () => loadIntoSim(p.origIdx);
+      row.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:700;color:var(--muted);min-width:22px;text-align:center;">#${rank+1}</div>
+          <div style="min-width:0;">
+            <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+            <div style="font-size:11px;color:var(--muted);">${p.cat} · <strong style="color:var(--text)">${metaVal}</strong></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <span style="font-size:11px;font-weight:600;color:${statusColor};white-space:nowrap;">${statusLabel}</span>
+          <span style="font-size:11px;color:var(--muted-light);">→</span>
+        </div>`;
+      picker.appendChild(row);
+    });
+  }
+
+  // Clicking "Simulate" on a row pre-loads that product into the simulator
+  function loadIntoSim(idx) {
+    const p = products[idx];
+    document.getElementById('sim-your-price').value = p.listed;
+    document.getElementById('sim-min-price').value  = p.market;
+    document.getElementById('sim-cost').value       = p.cost;
+    // Update header
+    document.getElementById('sim-product-name').textContent = p.name;
+    document.getElementById('sim-product-meta').textContent = `${p.cat} · ${p.units} units/wk · Market reference: €${p.market.toFixed(2)}`;
+    showTab('simulator');
+    runSim();
+  }
+
+  // ─── simulator ───────────────────────────────────────────────────────────────
+  function runSim() {
+    const your     = parseFloat(document.getElementById('sim-your-price').value) || 0;
+    const min      = parseFloat(document.getElementById('sim-min-price').value)  || 0;
+    const cost     = parseFloat(document.getElementById('sim-cost').value)       || 0;
+    const sellers  = 8;   // platform data — not user input
+    const rating   = 8.4; // platform data — not user input
+    const delivery = parseInt(document.getElementById('sim-delivery').value);
+
+    if (!your || !min || min <= 0) return;
+
+    const pct    = (your - min) / min * 100;
+    const stars  = getStars(your, min);
+    const margin = your > 0 ? ((your - cost) / your * 100).toFixed(1) : '—';
+
+    // Stars
+    document.getElementById('sim-stars-display').innerHTML =
+      Array.from({length:5}, (_,i) =>
+        `<div class="big-star ${i < stars ? 'filled' : 'empty'}"></div>`
+      ).join('');
+
+    // Label + reason
+    const labels  = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'};
+    const colours = {5:'sim-status-green',4:'sim-status-green',3:'sim-status-yellow',2:'sim-status-yellow',1:'sim-status-red'};
+    const classEl = document.getElementById('sim-class-label');
+    classEl.className   = 'classification-label ' + colours[stars];
+    classEl.textContent = `${stars} stars — ${labels[stars]}`;
+
+    const reasons = {
+      5: 'Price is at or below the market reference. Offer qualifies for buy box priority and full ad eligibility.',
+      4: 'Within 5% of market minimum. Strong buy box candidate, full advertising access.',
+      3: '5–15% above market minimum. Reduced buy box candidacy; ads visible but limited.',
+      2: '15–30% above market minimum. Unlikely to win buy box; ad placement suppressed.',
+      1: 'More than 30% above the cheapest active offer. Bol has removed this listing from search.'
     };
-    reader.readAsArrayBuffer(state.currentFile);
-  } else {
-    generateSyntheticWaveform();
-  }
-}
+    document.getElementById('sim-class-reason').textContent = reasons[stars];
 
-function generateSyntheticWaveform() {
-  state.waveformData = Array.from({length: 100}, (_, i) =>
-    0.2 + 0.7 * Math.abs(Math.sin(i * 0.4 + 0.3))
-  );
-  drawWaveform(0);
-}
+    // Show/hide not-shown banner
+    const banner = document.getElementById('sim-not-shown-banner');
+    if (banner) banner.style.display = stars === 1 ? 'block' : 'none';
 
-function drawWaveform(progress) {
-  const canvas = document.getElementById('waveform');
-  const dpr = window.devicePixelRatio || 1;
-  const w = canvas.offsetWidth;
-  const h = 60;
-  canvas.width = w * dpr;
-  canvas.height = h * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
+    // Deviation
+    const premEl = document.getElementById('sim-premium');
+    premEl.textContent = (pct > 0 ? '+' : '') + pct.toFixed(1) + '% vs market minimum';
+    premEl.style.color = pct <= 0 ? C.green : pct <= 5 ? C.yellow : C.red;
 
-  const bars = state.waveformData.length || 100;
-  const barW = Math.max(2, (w - bars) / bars);
-  const gap = w / bars - barW;
-  const aFrac = state.pointA !== null ? state.pointA / state.duration : null;
-  const bFrac = state.pointB !== null ? state.pointB / state.duration : null;
+    // Margin
+    const margEl = document.getElementById('sim-margin');
+    margEl.textContent = margin + '%';
+    margEl.style.color = parseFloat(margin) > 20 ? C.green : parseFloat(margin) > 10 ? C.yellow : C.red;
 
-  // Loop region background
-  if (aFrac !== null && bFrac !== null) {
-    ctx.fillStyle = state.looping ? 'rgba(124,109,255,0.12)' : 'rgba(124,109,255,0.06)';
-    ctx.beginPath();
-    ctx.roundRect(aFrac * w, 0, (bFrac - aFrac) * w, h, 4);
-    ctx.fill();
+    // Koopblok probability
+    let bb = [0, 5, 15, 40, 70, 85][stars];
+    if (rating >= 9) bb += 8;
+    if (delivery === 1) bb += 10;
+    if (sellers > 10)   bb -= 10;
+    bb = Math.min(95, Math.max(2, bb));
+    const bbEl = document.getElementById('sim-buyblock');
+    bbEl.textContent = bb + '% estimated';
+    bbEl.style.color = bb > 60 ? C.green : bb > 30 ? C.yellow : C.red;
 
-    // A line
-    ctx.fillStyle = '#4adb96';
-    ctx.fillRect(aFrac * w - 1, 0, 2, h);
+    // Ad eligibility
+    const adEl = document.getElementById('sim-advis');
+    adEl.textContent = stars >= 4 ? 'Eligible' : stars >= 2 ? 'Limited' : 'Excluded';
+    adEl.style.color  = stars >= 4 ? C.green : stars >= 2 ? C.yellow : C.red;
 
-    // B line
-    ctx.fillStyle = '#ff5e7d';
-    ctx.fillRect(bFrac * w - 1, 0, 2, h);
-  }
+    // Reference prices
+    document.getElementById('sim-rec').textContent =
+      `€${(min).toFixed(2)} for 5 stars · €${(min * 1.05).toFixed(2)} for 4 stars`;
+    document.getElementById('sim-rec').style.color = C.blue;
 
-  // Bars
-  for (let i = 0; i < bars; i++) {
-    const x = i * (barW + gap);
-    const barProgress = i / bars;
-    const amp = state.waveformData[i] || 0.3;
-    const barH = Math.max(3, amp * (h - 8));
-    const y = (h - barH) / 2;
-
-    const inLoop = aFrac !== null && bFrac !== null && barProgress >= aFrac && barProgress <= bFrac;
-    let color;
-    if (inLoop) {
-      color = state.looping ? 'rgba(165,153,255,0.9)' : 'rgba(165,153,255,0.5)';
-    } else if (barProgress < progress) {
-      color = 'rgba(255,255,255,0.5)';
-    } else {
-      color = 'rgba(255,255,255,0.12)';
+    // Adjustment path
+    const upgrades = [];
+    const thresholds = {2:0.30, 3:0.15, 4:0.05, 5:0.00};
+    for (let s = stars + 1; s <= 5; s++) {
+      const target    = (min * (1 + thresholds[s])).toFixed(2);
+      const drop      = (your - parseFloat(target)).toFixed(2);
+      const newMargin = ((parseFloat(target) - cost) / parseFloat(target) * 100).toFixed(1);
+      const marginNote = parseFloat(newMargin) < 10 ? ' ⚠ margin below 10%' : '';
+      upgrades.push(`${s} stars → €${target} (−€${drop} · margin ${newMargin}%${marginNote})`);
     }
-
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.roundRect(x, y, barW, barH, 2);
-    ctx.fill();
+    document.getElementById('sim-upgrade-path').innerHTML = upgrades.length
+      ? upgrades.map(u => `<div style="padding:4px 0;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border)">→ ${u}</div>`).join('')
+      : `<div style="color:${C.green};font-size:12px;font-weight:600">Already at the highest rating tier.</div>`;
   }
 
-  // Playhead
-  const headX = progress * w;
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.fillRect(headX - 1, 0, 2, h);
-}
-
-function onWaveformClick(e) {
-  if (!state.loaded) return;
-  const canvas = document.getElementById('waveform');
-  const rect = canvas.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = pct * state.duration;
-}
-
-function onWaveformTouch(e) {
-  if (!state.loaded) return;
-  const canvas = document.getElementById('waveform');
-  const rect = canvas.getBoundingClientRect();
-  const pct = (e.touches[0].clientX - rect.left) / rect.width;
-  audio.currentTime = Math.max(0, Math.min(1, pct)) * state.duration;
-}
-
-// ── Helpers ────────────────────────────────────────────
-function formatTime(s) {
-  if (!s || isNaN(s)) return '0:00';
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return m + ':' + String(sec).padStart(2, '0');
-}
-
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
-
-function vibrate() {
-  if (navigator.vibrate) navigator.vibrate(30);
-}
-
-function updateUI() {
-  updatePlayButton();
-  updateLoopToggle();
-}
-
-// ── Start ──────────────────────────────────────────────
-init();
+  // ─── init ─────────────────────────────────────────────────────────────────────
+  renderTable();
+  renderPicker();
+  loadIntoSim(0); // auto-load highest revenue product
 </script>
 </body>
 </html>
